@@ -1,0 +1,13 @@
+{
+  "RISE_Login_002_Correct": [
+    {
+      "username": "admin@demo.com",
+      "password": "riseDemo"
+    },
+    {
+      "username": "client@demo.com",
+      "password": "riseDemo"
+    }
+  ],
+  "Test_case_02": []
+}

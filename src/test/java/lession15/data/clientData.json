@@ -1,0 +1,23 @@
+{
+  "RISE_Client_001_AddNewClient": [
+    {
+      "type": "Organization",
+      "companyName": "Automation",
+      "owner": "Sara Ann",
+      "address": "Yen Hoa, Cau Giay",
+      "city": "Ha Noi",
+      "state": "Ha Noi",
+      "zip": "10000",
+      "country": "VietNam",
+      "phone": "09462108xx",
+      "website": "vincent@demo.com",
+      "vatNumber": "10",
+      "gstNumber": "10",
+      "clientGroup": "Gold",
+      "currency": "AMD",
+      "currencySymbol": "AMD",
+      "disableOnlinePayment": "true"
+    }
+  ],
+  "Test_case_02": []
+}
