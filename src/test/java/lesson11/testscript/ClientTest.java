@@ -1,4 +1,4 @@
-package cheatsheet;
+package lesson11.testscript;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.wdm.config.DriverManagerType;
@@ -8,14 +8,11 @@ import lesson11.pages.LoginPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.safari.SafariDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class DemoTest {
+public class ClientTest {
     private WebDriver mWebDriver;
     private String baseURL = "https://rise.fairsketch.com";
     private LoginPage loginPage;
@@ -39,15 +36,6 @@ public class DemoTest {
             mWebDriver.quit();
             mWebDriver = null;
         }
-    }
-
-    private  void driverInit(){
-        mWebDriver = new FirefoxDriver();
-        mWebDriver = new ChromeDriver();
-        mWebDriver = new InternetExplorerDriver();
-        mWebDriver = new SafariDriver();
-
-                ChromeOptions
     }
 
     @Test(description = "Verify the client")

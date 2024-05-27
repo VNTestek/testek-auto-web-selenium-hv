@@ -117,8 +117,4 @@ public class TestBase {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) webDriver;
         jsExecutor.executeScript("arguments[0].scrollIntoView(true);", getWebElement(webDriver, locatorType));
     }
-
-
-
-
 }
