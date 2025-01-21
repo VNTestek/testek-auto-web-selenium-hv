@@ -46,8 +46,6 @@ public class DemoTest {
         mWebDriver = new ChromeDriver();
         mWebDriver = new InternetExplorerDriver();
         mWebDriver = new SafariDriver();
-
-                ChromeOptions
     }
 
     @Test(description = "Verify the client")
