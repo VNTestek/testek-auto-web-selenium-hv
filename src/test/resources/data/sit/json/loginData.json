@@ -1,0 +1,15 @@
+{
+  "Testek_Login_001_Valid": [
+    {
+      "Id": "Valid-Admin Role",
+      "Description": "Verify the login function with admin roles",
+      "AccountTest": "",
+      "TestScenario": "",
+      "Preconditions": "",
+      "Executed": true,
+      "Category": "REGRESSION",
+      "UserName": "admin_com_role",
+      "Password": "123456"
+    }
+  ]
+}

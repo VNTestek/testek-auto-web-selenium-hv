@@ -1,0 +1,56 @@
+{
+  "key_env": [],
+  "env": {
+    "sit": {
+      "baseUrl": "https://testek.vn/lab/auto",
+      "account": "user_com_role",
+      "password": "aA12345678@",
+      "apiUrl": "https://testek.vn/lab/api/v0/prod-man",
+      "client": {
+      },
+      "database": [
+        {
+          "type": "",
+          "name": "",
+          "url": "",
+          "account": "",
+          "password": ""
+        }
+      ]
+    },
+    "uat": {
+      "baseUrl": "",
+      "account": "",
+      "password": "",
+      "apiUrl": "",
+      "client": {
+      },
+      "database": [
+        {
+          "type": "",
+          "name": "",
+          "url": "",
+          "account": "",
+          "password": ""
+        }
+      ]
+    },
+    "pilot": {
+      "baseUrl": "",
+      "account": "",
+      "password": "",
+      "apiUrl": "",
+      "client": {
+      },
+      "db": [
+        {
+          "type": "",
+          "name": "",
+          "url": "",
+          "account": "",
+          "password": ""
+        }
+      ]
+    }
+  }
+}

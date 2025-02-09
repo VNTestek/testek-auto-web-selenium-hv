@@ -1,0 +1,40 @@
+{
+  "Testek_Login_001_Valid": [
+    {
+      "Description": "Verify the login function with admin roles",
+      "Id": "Valid-Admin Role",
+      "Category": "REGRESSION",
+      "Executed": true,
+      "AccountTest": "",
+      "TestScenario": "",
+      "Preconditions": "",
+      "master": {
+        "config": {
+          "isFill": [],
+          "isVerify": []
+        },
+        "UserName": "admin_com_role",
+        "Password": "aA12345678@"
+      },
+      "detail": {}
+    },
+    {
+      "Description": "Verify the login function with user roles",
+      "Id": "Valid-User Role",
+      "Category": "REGRESSION",
+      "Executed": true,
+      "AccountTest": "",
+      "TestScenario": "",
+      "Preconditions": "",
+      "master": {
+        "config": {
+          "isFill": [],
+          "isVerify": []
+        },
+        "UserName": "user_com_role",
+        "Password": "aA12345678@"
+      },
+      "detail": {}
+    }
+  ]
+}
