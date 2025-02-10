@@ -1,0 +1,46 @@
+{
+  "Testek_CreateProduct_001_Valid": [
+    {
+      "Description": "Verify create new product success",
+      "Id": "Valid-CreateProduct_01",
+      "Category": "REGRESSION",
+      "Executed": true,
+      "AccountTest": "",
+      "TestScenario": "",
+      "Preconditions": "",
+      "master": {
+        "config": {
+          "isFill": [],
+          "isVerify": []
+        },
+        "Category": "Điện thoại di động",
+        "Supplier": "Nikon VietNam",
+        "Code": "SANPHAM_",
+        "Unit": "Chiếc",
+        "Name": "Samsung Galaxy S25 - "
+      },
+      "detail": {}
+    },
+    {
+      "Description": "Verify create new product success 02",
+      "Id": "Valid-CreateProduct02",
+      "Category": "REGRESSION",
+      "Executed": true,
+      "AccountTest": "",
+      "TestScenario": "",
+      "Preconditions": "",
+      "master": {
+        "config": {
+          "isFill": [],
+          "isVerify": []
+        },
+        "Category": "Tivi",
+        "Supplier": "Nikon VietNam",
+        "Code": "SANPHAM_",
+        "Unit": "Chiếc",
+        "Name": "Samsung Ultra 65inch - "
+      },
+      "detail": {}
+    }
+  ]
+}

@@ -5,7 +5,7 @@ import com.testek.consts.FrameConst.LogType;
 import com.testek.datadriven.DataModel;
 import com.testek.driver.DriverManager;
 import com.testek.projects.enums.ProjectConst;
-import com.testek.study.demo.pages.ProductPage;
+import com.testek.projects.page.pages.ProductPage;
 import com.testek.utils.Log;
 import com.testek.utils.WebUI;
 import io.qameta.allure.Step;
