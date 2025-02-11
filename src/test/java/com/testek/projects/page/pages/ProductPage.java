@@ -1,5 +1,6 @@
 package com.testek.projects.page.pages;
 
+import com.testek.consts.FrameConst;
 import com.testek.projects.common.BasePage;
 import com.testek.projects.model.CreateProductModel;
 import org.openqa.selenium.By;
@@ -73,7 +74,7 @@ public class ProductPage extends BasePage {
     public void selectCategory(String category) {
         clickElementViaJs(formItemCategory, "Select Category");
         formItemCategory.sendKeys(category);
-        sleepMillisecond(500);
+        sleepMillisecond(1000);
         clickElement(getTypeInputEle(category), "Select Category Type");
     }
 
@@ -81,7 +82,7 @@ public class ProductPage extends BasePage {
     public void selectSupplier(String supplier) {
         clickElementViaJs(formItemSuppler, "Select Suppler");
         formItemSuppler.sendKeys(supplier);
-        sleepMillisecond(500);
+        sleepMillisecond(1000);
         clickElement(getTypeInputEle(supplier), "Select Suppler Type");
     }
 
@@ -132,7 +133,7 @@ public class ProductPage extends BasePage {
         return this;
     }
 
-    public ProductPage clickCreatePrd() {
+    public ProductPage clickAddPrd() {
         clickElement(btnCreateProduct, "Btn Add Product");
         return this;
     }
@@ -149,6 +150,12 @@ public class ProductPage extends BasePage {
         return this;
     }
 
+    public ProductPage verifyProductPageDisplay() {
+        webDriver.getTitle();
+        assertEqualCondition(null, "Testek admin", webDriver.getTitle(),
+                FrameConst.FailureHandling.STOP_ON_FAILURE, "Verify the page title");
+        return this;
+    }
     //endregion
 
 }
