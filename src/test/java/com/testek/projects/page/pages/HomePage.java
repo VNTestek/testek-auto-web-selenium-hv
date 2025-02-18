@@ -2,7 +2,6 @@ package com.testek.projects.page.pages;
 
 import com.testek.driver.DriverManager;
 import com.testek.projects.common.BasePage;
-import lombok.Getter;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -41,10 +40,9 @@ public class HomePage extends BasePage {
     //***************** Verify *****************/
     //region Verify
 
-    public HomePage verifyHomePage() {
+    public void verifyHomePage() {
         waitForElementVisible(aboutMeEle);
         verifyElementTextEqual(aboutMeEle, "TESTEK - KIỂM THỬ THỰC CHIẾN");
-        return this;
     }
 
     //endregion

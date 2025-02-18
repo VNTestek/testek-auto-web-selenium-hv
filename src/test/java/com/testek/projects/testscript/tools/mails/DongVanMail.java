@@ -37,12 +37,17 @@ public class DongVanMail {
 
     public String callAPIGetOTPFromMail(String email, String token, String clientId, String subject) {
         String url = MessageFormat.format("{0}/api/get_messages_oauth2", BASE_URL);
-        String body = """
+        /*String body = """
                 {
                     "email": "%s",
                     "refresh_token": "%s",
                     "client_id": "%s"
-                }""".formatted(email, token, clientId);
+                }""".formatted(email, token, clientId);*/
+        String body = String.format("{\n" +
+                "    \"email\": \"%s\",\n" +
+                "    \"refresh_token\": \"%s\",\n" +
+                "    \"client_id\": \"%s\"\n" +
+                "}", email, token, clientId);
         Response resEmail;
         int count = 0;
         do {
