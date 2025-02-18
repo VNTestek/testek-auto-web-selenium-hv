@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="Regression Tests" parallel="classes" thread-count="1">
+    <listeners>
+        <listener class-name="com.testek.report.EmailReporter"/>
+    </listeners>
+
+    <test name="Testek Module" enabled="true">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="com.testek.projects.testscript.tools.GenParkAILogin"/>
+        </classes>
+    </test>
+
+</suite>

@@ -20,13 +20,12 @@ public class AnnotationTransformer implements IAnnotationTransformer {
 
     @Override
     public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
-        //annotation.setRetryAnalyzer(Retry.class);
         if (Objects.isNull(testMethod)) return;
         currentTestGroups.set(getGroupsFromTestClass(testMethod));
         annotation.setGroups(currentTestGroups.get());
 
-        // Exclude the module for execution
-        //excludeModule(annotation, testMethod);
+         /*Exclude the module for execution
+        excludeModule(annotation, testMethod);*/
     }
 
     @Override

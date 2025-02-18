@@ -2,6 +2,7 @@ package com.testek.consts;
 
 import com.testek.database.DatabaseInfo;
 import com.testek.utils.configloader.AbsPropertyUtils;
+import io.restassured.http.ContentType;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -77,12 +78,16 @@ public class FrameConst {
         public static final String BOLD_END = "</b>";
         public static final String FAIL = BOLD_START + "FAIL" + BOLD_END;
         public static final String PASS = BOLD_START + "PASS" + BOLD_END;
+        public static String LOG_LEVEL = "DEBUG";
     }
     //endregion
 
     //endregion
     @Data
     public static class DataConfig {
+        private DataConfig() {
+        }
+
         public static String SEPARATE_KEY = "%MS%";
         public static String SKIP_KEY = "^";
         public static String CONFIG_COL = "CONFIG";
@@ -102,6 +107,9 @@ public class FrameConst {
 
     @Data
     public static class Icon {
+        private Icon() {
+        }
+
         public static String ICON_SMILEY_PASS = "<i class='fa fa-smile-o' style='font-size:24px'></i>";
         public static String ICON_SMILEY_SKIP = "<i class=\"fas fa-frown-open\"></i>";
         public static String ICON_SMILEY_FAIL = "<i class='fa fa-frown-o' style='font-size:24px'></i>";
@@ -151,7 +159,8 @@ public class FrameConst {
         INFO,           // Display information
         STEP,           // Display the log for each steps
         VERIFY,         // Display verification log
-        DEBUG           // Display the debug log
+        DEBUG,           // Display the debug log
+        WARNING
     }
 
     /**
@@ -175,5 +184,23 @@ public class FrameConst {
     public enum FailureHandling {
         STOP_ON_FAILURE,            // Stop the execution when a failure occurs
         CONTINUE_ON_FAILURE         // Continue the execution when a failure occurs
+    }
+
+    @Getter
+    public enum HTTPMethod {
+        POST, PUT, DELETE, PATCH, GET
+    }
+
+    @Getter
+    public enum ContentTypeManager {
+        APPLICATION_JSON(ContentType.JSON),
+        MULTIPART_FORM(ContentType.MULTIPART),
+        FORM_URLENCODED(ContentType.URLENC);
+
+        private final ContentType value;
+
+        ContentTypeManager(ContentType contentType) {
+            this.value = contentType;
+        }
     }
 }

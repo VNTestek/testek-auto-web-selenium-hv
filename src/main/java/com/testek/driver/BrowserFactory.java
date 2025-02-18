@@ -10,6 +10,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ThreadGuard;
 
 import java.net.URL;
+import java.util.EnumMap;
 import java.util.HashMap;
 
 import static com.testek.consts.FrameConst.ProjectConfig.*;
@@ -18,15 +19,18 @@ import static com.testek.consts.FrameConst.ProjectConfig.*;
  * Browser Factory, you can create the driver and get the options.
  */
 public class BrowserFactory {
-    final static HashMap<FrameConst.Browser, BrowserDriver> browserDriverMap;
+    //final static HashMap<FrameConst.Browser, BrowserDriver> browserDriverMap;
 
+    final static  EnumMap<FrameConst.Browser, BrowserDriver> browserDriverMap;
     static {
-        browserDriverMap = new HashMap<>();
+        browserDriverMap = new EnumMap<>(FrameConst.Browser.class);
         browserDriverMap.put(FrameConst.Browser.CHROME, new ChromeBrowserDriver());
         browserDriverMap.put(FrameConst.Browser.EDGE, new EdgeBrowserDriver());
         browserDriverMap.put(FrameConst.Browser.FIREFOX, new FirefoxBrowserDriver());
         browserDriverMap.put(FrameConst.Browser.SAFARI, new SafariBrowserDriver());
     }
+
+    private BrowserFactory() {}
 
     /**
      * Create the Selenium Web Driver with the specific browser depending on the target can be LOCAL or REMOTE

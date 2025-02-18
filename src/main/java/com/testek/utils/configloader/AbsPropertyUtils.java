@@ -16,9 +16,9 @@ import static java.util.Locale.ENGLISH;
 @Getter
 @Setter
 public abstract class AbsPropertyUtils {
-    public static ResourceBundle LANGUAGE_RESOURCE;
+    private static ResourceBundle LANGUAGE_RESOURCE;
     public static Properties properties;
-    public static Map<String, ResourceBundle> ERROR_CODE_RESOURCE = new HashMap<>();
+    protected static Map<String, ResourceBundle> ERROR_CODE_RESOURCE = new HashMap<>();
 
     public static void loadLanguageBundle(String language) {
         Locale locale = new Locale(LANG_VI, "VI");
@@ -41,7 +41,7 @@ public abstract class AbsPropertyUtils {
      */
     public static String getLanguageValue(String key) {
         try {
-            if (LANGUAGE_RESOURCE == null) loadLanguageBundle(APILanguageProperty.getLanguageLocal());
+            if (LANGUAGE_RESOURCE == null) loadLanguageBundle(APILanguageProperty.getLANGUAGE());
             return LANGUAGE_RESOURCE.getString(key);
         } catch (Exception e) {
             return "LANGUAGE_NOT_FOUND";
@@ -55,7 +55,7 @@ public abstract class AbsPropertyUtils {
             keyValue = properties.getProperty(key);
             return LanguageUtils.convertCharset_ISO_8859_1_To_UTF8(keyValue);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            Log.error(e.getMessage());
         }
         return keyValue;
     }

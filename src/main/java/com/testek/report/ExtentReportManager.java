@@ -19,6 +19,11 @@ import com.testek.driver.DriverManager;
 import com.testek.utils.IconUtils;
 import com.testek.utils.Log;
 import com.testek.utils.ReportUtils;
+import io.restassured.http.Header;
+import io.restassured.response.Response;
+import io.restassured.specification.QueryableRequestSpecification;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.SpecificationQuerier;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.openqa.selenium.OutputType;
@@ -175,6 +180,44 @@ public final class ExtentReportManager {
             extentTest.log(Status.INFO, message);
         }
     }
+    public static void logResponse(Response response) {
+        logResponseInReport(response);
+    }
+    public static void logResponseInReport(Response response) {
+        if (FrameConst.ReportConst.LOG_LEVEL.equalsIgnoreCase("Debug")) {
+            System.out.println("=== HTTP Code: " + response.statusCode());
+            System.out.println("SDebug - Response: \n" + response.asPrettyString());
+        }
+
+        if (Objects.nonNull(ExtentTestManager.getExtentTest())) {
+            ExtentTestManager.getExtentTest().log(Status.INFO, "API Response: HTTP Code :   " + response.statusCode());
+            ExtentTestManager.getExtentTest().log(Status.INFO, MarkupHelper.createCodeBlock(response.asPrettyString()));
+        }
+    }
+    public static void logRequest(RequestSpecification requestSpecification, FrameConst.HTTPMethod method) {
+        QueryableRequestSpecification query = SpecificationQuerier.query(requestSpecification);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(method.name()).append(" : ").append(query.getURI()).append("\nHeaders:");
+        for (Header header : query.getHeaders()) {
+            stringBuilder.append("\n\t").append(header.getName()).append(":").append(header.getValue()).append("\n");
+        }
+        String reqBody = query.getBody();
+        if (Objects.nonNull(reqBody))
+            stringBuilder.append("Body\n").append(reqBody);
+
+        logRequestInReport(stringBuilder.toString());
+        if (FrameConst.ReportConst.LOG_LEVEL.equalsIgnoreCase("Debug")) {
+            requestSpecification.log().all();
+        }
+    }
+
+    public static void logRequestInReport(String request) {
+        if (Objects.nonNull(ExtentTestManager.getExtentTest())) {
+            //ExtentTestManager.getExtentTest().log(Status.INFO, MarkupHelper.createLabel("API REQUEST", ExtentColor.ORANGE));
+            ExtentTestManager.getExtentTest().log(Status.INFO, MarkupHelper.createCodeBlock(request));
+        }
+    }
 
     synchronized public static void addCategory(String cateName) {
         ExtentTestManager.getExtentTest().assignCategory(cateName);
@@ -266,5 +309,4 @@ public final class ExtentReportManager {
             Log.error("VException: " + e.getMessage());
         }
     }
-
 }

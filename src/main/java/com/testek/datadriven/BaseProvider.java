@@ -14,7 +14,6 @@ public class BaseProvider {
      * Merge 2 objec to one object
      *
      */
-    // TODO: 06/12/2023 Check lại accessible true cho private field.
     public static <T> T mergeObjects(T first, T second) {
         Class<?> clas = first.getClass();
         Field[] fields = clas.getDeclaredFields();

@@ -13,12 +13,10 @@ import org.testng.annotations.Test;
 import static java.lang.Thread.sleep;
 
 public class CreateProductTest extends TestBase {
-
     ProductPage productPage;
 
     @BeforeClass(alwaysRun = true)
     public void beforeClass() {
-
         HomePage homePage = new HomePage();
         productPage = homePage.gotoProductPage();
     }
