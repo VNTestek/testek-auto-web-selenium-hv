@@ -76,7 +76,8 @@ public class TestBase {
         /* Skip login for LoginTest */
         if (!isLoginTest()) {
             LoginPage loginPage = PageManagement.accessWebPage();
-            loginPage.login("user_com_role", "aA12345678@");
+//            loginPage.login("user_com_role", "aA12345678@");
+            loginPage.login("admin_com_role", "aA12345678@");
         }
     }
 
