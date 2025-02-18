@@ -34,7 +34,7 @@ public class LoginTest extends TestBase {
 
     @FrameAnnotation(category = {CategoryType.REGRESSION}, author = {AuthorType.Vincent}, reviewer = {AuthorType.Vincent})
     @Test(description = "Verify the login function", dataProvider = "Testek_Login_001_Valid", dataProviderClass = LoginProvider.class)
-    public void Testek_Login_001_Valid(LoginModel data) throws InterruptedException {
+    public void Testek_Login_001_Valid(LoginModel data) {
         LoginPage loginPage = PageManagement.accessWebPage();
         HomePage homePage = loginPage.verifyLoginPageDisplay()
                 .enterUserName(data.getUserName().getValue())

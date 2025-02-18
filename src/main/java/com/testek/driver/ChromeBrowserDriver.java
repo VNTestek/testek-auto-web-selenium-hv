@@ -34,8 +34,8 @@ public class ChromeBrowserDriver extends BrowserDriver {
         if (isLoadings.length > 0 && isLoadings[0])
             chromeOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);
 
-        /* Using for skip loading image in background */
-        // chromeOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);
+        /* Using for skip loading image in background
+        chromeOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);*/
         return chromeOptions;
     }
 }

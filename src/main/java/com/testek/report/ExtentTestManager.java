@@ -1,6 +1,10 @@
 package com.testek.report;
 
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.markuputils.MarkupHelper;
+import com.testek.consts.FrameConst;
+import java.util.Objects;
 
 public class ExtentTestManager {
 
@@ -18,5 +22,24 @@ public class ExtentTestManager {
     public static void unload() {
         extentTest.remove();
     }
-
+    public static void addReportInfo(FrameConst.LogType logType, String extMsg, boolean isResult, String responseCodeBlock) {
+        // Add for Extent Report
+        if (ExtentTestManager.getExtentTest() != null) {
+            switch (logType) {
+                case INFO:
+                    ExtentReportManager.info(extMsg);
+                    break;
+                case VERIFY:
+                    if (isResult) ExtentReportManager.pass(extMsg);
+                    else ExtentReportManager.fail(extMsg);
+                    if (Objects.nonNull(responseCodeBlock)) {
+                        ExtentTestManager.getExtentTest().log(Status.INFO, MarkupHelper.createCodeBlock(responseCodeBlock));
+                    }
+                case WARNING:
+                    if (Objects.nonNull(responseCodeBlock)) {
+                        ExtentTestManager.getExtentTest().log(Status.INFO, MarkupHelper.createCodeBlock(responseCodeBlock));
+                    }
+            }
+        }
+    }
 }

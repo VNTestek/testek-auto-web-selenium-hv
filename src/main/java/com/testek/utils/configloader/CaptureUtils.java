@@ -97,7 +97,7 @@ public class CaptureUtils extends ScreenRecorder {
 
             TakesScreenshot ts = (TakesScreenshot) driver;
             File source = ts.getScreenshotAs(OutputType.FILE);
-            FileUtils.copyFile(source, new File(path + "/" + fileName + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".png"));
+            FileUtils.copyFile(source, new File(path + File.separator + fileName + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".png"));
             Log.info("captureScreenshot: Screenshot taken current URL: " + driver.getCurrentUrl());
         } catch (Exception e) {
             Log.error("Exception while taking screenshot: " + e.getMessage());
