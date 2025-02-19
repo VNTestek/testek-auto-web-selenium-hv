@@ -60,7 +60,7 @@ public class ProductPage extends BasePage {
     WebElement txtAreaResult;
 
     public WebElement getTypeInputEle(String type) {
-        return  waitForElementVisible(By.xpath(String.format("//td[text()='%s']", type)));
+        return waitForElementVisible(By.xpath(String.format("//td[text()='%s']", type)));
     }
     //endregion
 
@@ -75,49 +75,57 @@ public class ProductPage extends BasePage {
     }
 
     /* Select category product */
-    public void selectCategory(String category) {
+    public ProductPage selectCategory(String category) {
         clickElementViaJs(formItemCategoryEle, "Select Category");
         formItemCategoryEle.sendKeys(category);
         //sleepMillisecond(1000);
         clickElement(getTypeInputEle(category), "Select Category Type");
+        return this;
     }
 
     /* Select supplier product */
-    public void selectSupplier(String supplier) {
+    public ProductPage selectSupplier(String supplier) {
         clickElementViaJs(formItemSupplerEle, "Select Suppler");
         formItemSupplerEle.sendKeys(supplier);
         //sleepMillisecond(1000);
         clickElement(getTypeInputEle(supplier), "Select Suppler Type");
+        return this;
     }
 
     /* Input product code */
-    public void enterPrdCode(String preCode) {
+    public ProductPage enterPrdCode(String preCode) {
         inputTextTo(edtProductCodeEle, "ProductCode", preCode + getCurrentTimestamp());
+        return this;
     }
 
     /* Input product name */
-    public void enterPrdName(String preName) {
+    public ProductPage enterPrdName(String preName) {
         inputTextTo(edtProductNameEle, "ProductName", preName + getCurrentTimestamp());
+        return this;
     }
 
     /* Input product unit */
-    public void enterPrdUnit(String unit) {
+    public ProductPage enterPrdUnit(String unit) {
         inputTextTo(edtProductUnitEle, "Unit", unit);
+        return this;
     }
 
     /* Input product description */
-    public void enterPrdDes(String des) {
+    public ProductPage enterPrdDes(String des) {
         inputTextTo(edtProductDesEle, "Description", des);
+        return this;
     }
 
     /* Input product price */
-    public void enterPrdPrice(String price) {
+    public ProductPage enterPrdPrice(String price) {
         inputTextTo(edtProductPriceEle, "Price", price);
+        return this;
     }
 
     /* Input product quantity */
-    public void enterPrdQuantity(String quantity) {
+    public ProductPage enterPrdQuantity(String quantity) {
         inputTextTo(edtProductQuantityEle, "Quantity", quantity);
+        return this;
     }
 
     //endregion
@@ -126,14 +134,14 @@ public class ProductPage extends BasePage {
     //region Integration Functions
     public ProductPage fillProductForm(CreateProductModel createProductModel) {
         waitForElementClickable(btnCreateProductEle);
-        selectCategory(createProductModel.getCategory().getValue());
-        selectSupplier(createProductModel.getSupplier().getValue());
-        enterPrdCode(createProductModel.getCode().getValue());
-        enterPrdUnit(createProductModel.getUnit().getValue());
-        enterPrdName(createProductModel.getCategory().getValue() + " " + createProductModel.getSupplier().getValue());
-        enterPrdDes(createProductModel.getCategory().getValue());
-        enterPrdPrice(String.valueOf(getRandomPrice(200, 3000)));
-        enterPrdQuantity(String.valueOf(getRandomInt(200, 3000)));
+        this.selectCategory(createProductModel.getCategory().getValue())
+                .selectSupplier(createProductModel.getSupplier().getValue())
+                .enterPrdCode(createProductModel.getCode().getValue())
+                .enterPrdUnit(createProductModel.getUnit().getValue())
+                .enterPrdName(createProductModel.getCategory().getValue() + " " + createProductModel.getSupplier().getValue())
+                .enterPrdDes(createProductModel.getCategory().getValue())
+                .enterPrdPrice(String.valueOf(getRandomPrice(200, 3000)))
+                .enterPrdQuantity(String.valueOf(getRandomInt(200, 3000)));
         return this;
     }
 
