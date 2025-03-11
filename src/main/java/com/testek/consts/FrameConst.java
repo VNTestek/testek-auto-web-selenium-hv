@@ -31,13 +31,13 @@ public class FrameConst {
         public static String REMOTE_PORT = AbsPropertyUtils.getValue("remote_port");
         public static String PROJECT_NAME = AbsPropertyUtils.getValue("project_name");
 
-        public static String APPLICATION_VERSION = AbsPropertyUtils.getValue("app_version");
+        public static String APPLICATION_VERSION = AbsPropertyUtils.getValue("testing_version");
         public static String APPLICATION_NAME = AbsPropertyUtils.getValue("app_name");
         public static String APPLICATION_ENV = AbsPropertyUtils.getValue("app_environment");
 
         public static String AUTHOR = AbsPropertyUtils.getValue("author");
         public static String TARGET = AbsPropertyUtils.getValue("target");
-        public static String HEADLESS = AbsPropertyUtils.getValue("headless");
+        public static Boolean HEADLESS = AbsPropertyUtils.getBoolValue("headless");
         public static String MAINTAIN_DATA = AbsPropertyUtils.getValue("maintainData");
         public static String TFS_LINK = AbsPropertyUtils.getValue("tfsLink");
 

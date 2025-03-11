@@ -18,8 +18,8 @@ public class CreateProductTest extends TestBase {
 
     @BeforeClass(alwaysRun = true)
     public void beforeClass() {
-        homePage = new HomePage();      // Truy cap homepage : bao gom login
-        homePage.verifyHomePage();      // Verify homepage hien thi
+        homePage = new HomePage();
+        homePage.verifyHomePage();
     }
 
     @BeforeMethod(alwaysRun = true)
@@ -27,9 +27,9 @@ public class CreateProductTest extends TestBase {
         productPage = homePage.gotoProductPage();   // Access to Product page
     }
 
-    @FrameAnnotation(category = {FrameConst.CategoryType.REGRESSION}, author = {AuthorType.Testek}, reviewer = {AuthorType.Vincent})
-    @Test(description = "Verify creating a new product", dataProvider = "Testek_CreateProduct_001_Valid", dataProviderClass = CreateProductProvider.class)
-    public void Testek_CreateProduct_001_Valid(CreateProductModel createProductModel) {
+    @FrameAnnotation(category = {FrameConst.CategoryType.REGRESSION}, author = {AuthorType.Vincent}, reviewer = {AuthorType.Vincent})
+    @Test(description = "Verify creating a new product", dataProvider = "TK_CreateProduct_001_Valid", dataProviderClass = CreateProductProvider.class)
+    public void TK_CreateProduct_001_Valid(CreateProductModel createProductModel) {
         productPage.verifyProductPageDisplay(); // Verify product page hien thi
 
         productPage.clickToCreateProduct()      // Click button Create Product

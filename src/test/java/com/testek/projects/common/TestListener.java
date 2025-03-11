@@ -9,7 +9,7 @@ import com.testek.listeners.Retry;
 import com.testek.report.ExtentReportManager;
 import com.testek.report.ExtentTestManager;
 import com.testek.utils.IconUtils;
-import com.testek.utils.Log;
+import com.testek.utils.LogUtils;
 import com.testek.utils.configloader.CaptureUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.testng.*;
@@ -48,7 +48,7 @@ public class TestListener implements ITestListener, ISuiteListener, IInvokedMeth
 
     @Override
     public void onStart(ISuite iSuite) {
-        Log.info(String.format("%s\nTestListener: TESTING FOR TEST SUITE: %s%s", separateItem, iSuite.getName(), separateItem));
+        LogUtils.info(String.format("%s\nTestListener: TESTING FOR TEST SUITE: %s%s", separateItem, iSuite.getName(), separateItem));
         iSuite.setAttribute("WebDriver", DriverManager.getDriver());
         //Starting record video
         if (VIDEO_RECORD) {
@@ -59,7 +59,7 @@ public class TestListener implements ITestListener, ISuiteListener, IInvokedMeth
 
     @Override
     public void onFinish(ISuite iSuite) {
-        Log.info(String.format("\nTestListener: FINISH TESTING FOR TEST SUITE: %s %s", iSuite.getName(), separateItem));
+        LogUtils.info(String.format("\nTestListener: FINISH TESTING FOR TEST SUITE: %s %s", iSuite.getName(), separateItem));
         ExtentReportManager.flushReports();
         //Stop recording the video
         if (VIDEO_RECORD) {
@@ -79,7 +79,7 @@ public class TestListener implements ITestListener, ISuiteListener, IInvokedMeth
 
     @Override
     public void onTestStart(ITestResult iTestResult) {
-        Log.info(String.format("%s\nTestListener: START TC:  %s", separateItem, getTestName(iTestResult)));
+        LogUtils.info(String.format("%s\nTestListener: START TC:  %s", separateItem, getTestName(iTestResult)));
 
         ExtentTestManager.unload();
         addTestToExtentReport(iTestResult);
@@ -87,7 +87,7 @@ public class TestListener implements ITestListener, ISuiteListener, IInvokedMeth
 
     @Override
     public void onTestSuccess(ITestResult iTestResult) {
-        Log.info(String.format("\nTestListener: COMPLETED TC: %s - PASS %s", getTestName(iTestResult), separateItem));
+        LogUtils.info(String.format("\nTestListener: COMPLETED TC: %s - PASS %s", getTestName(iTestResult), separateItem));
         updateRetryTestName(iTestResult);
 
         if (SCREENSHOT_PASSED_STEPS) {
@@ -101,13 +101,13 @@ public class TestListener implements ITestListener, ISuiteListener, IInvokedMeth
 
     @Override
     public void onTestFailure(ITestResult iTestResult) {
-        Log.info(String.format("\nTestListener: COMPLETED TC: %s - FAIL %s", getTestName(iTestResult), separateItem));
+        LogUtils.info(String.format("\nTestListener: COMPLETED TC: %s - FAIL %s", getTestName(iTestResult), separateItem));
         updateRetryTestName(iTestResult);
 
         if (SCREENSHOT_FAILED_STEPS) {
             CaptureUtils.captureScreenshot(DriverManager.getDriver(), getTestName(iTestResult));
         }
-        Log.error("FAILED !! Screenshot for test case: " + getTestName(iTestResult));
+        LogUtils.error("FAILED !! Screenshot for test case: " + getTestName(iTestResult));
         if (ExtentTestManager.getExtentTest() == null) {
             addTestToExtentReport(iTestResult);
         }
@@ -116,7 +116,7 @@ public class TestListener implements ITestListener, ISuiteListener, IInvokedMeth
         ExtentReportManager.addScreenShot(Status.FAIL, getTestName(iTestResult));
         ExtentReportManager.logMessage(Status.FAIL, "Test case: " + getTestName(iTestResult) + " - FAIL");
         if (Objects.nonNull(iTestResult.getThrowable())) {
-            Log.error(iTestResult.getThrowable());
+            LogUtils.error(iTestResult.getThrowable());
             ExtentReportManager.logMessage(Status.FAIL, iTestResult.getThrowable());
         }
         ExtentReportManager.unloadTest();
@@ -124,7 +124,7 @@ public class TestListener implements ITestListener, ISuiteListener, IInvokedMeth
 
     @Override
     public void onTestSkipped(ITestResult iTestResult) {
-        Log.info(String.format("\nTestListener: COMPLETED TC: %s - SKIP %s", getTestName(iTestResult), separateItem));
+        LogUtils.info(String.format("\nTestListener: COMPLETED TC: %s - SKIP %s", getTestName(iTestResult), separateItem));
         updateRetryTestName(iTestResult);
 
         if (SCREENSHOT_SKIPPED_STEPS) {
@@ -144,7 +144,7 @@ public class TestListener implements ITestListener, ISuiteListener, IInvokedMeth
         if (ExtentTestManager.getExtentTest() == null) {
             addTestToExtentReport(iTestResult);
         }
-        Log.error("Test failed but it is in defined success ratio " + getTestName(iTestResult));
+        LogUtils.error("Test failed but it is in defined success ratio " + getTestName(iTestResult));
         ExtentReportManager.logMessage("Test failed but it is in defined success ratio " + getTestName(iTestResult));
         ExtentReportManager.unloadTest();
     }
@@ -176,7 +176,7 @@ public class TestListener implements ITestListener, ISuiteListener, IInvokedMeth
         ExtentReportManager.addScreenShot(Status.WARNING, getTestName(tr));
         ExtentReportManager.logMessage(Status.WARNING, "Configuration: " + getTestName(tr) + " - FAIL");
         if (Objects.nonNull(tr.getThrowable())) {
-            Log.error(tr.getThrowable());
+            LogUtils.error(tr.getThrowable());
             ExtentReportManager.logMessage(Status.WARNING, tr.getThrowable());
         }
         ExtentReportManager.unloadTest();

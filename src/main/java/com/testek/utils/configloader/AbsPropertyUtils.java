@@ -2,7 +2,7 @@ package com.testek.utils.configloader;
 
 
 import com.testek.utils.LanguageUtils;
-import com.testek.utils.Log;
+import com.testek.utils.LogUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONObject;
@@ -55,7 +55,7 @@ public abstract class AbsPropertyUtils {
             keyValue = properties.getProperty(key);
             return LanguageUtils.convertCharset_ISO_8859_1_To_UTF8(keyValue);
         } catch (Exception e) {
-            Log.error(e.getMessage());
+            LogUtils.error(e.getMessage());
         }
         return keyValue;
     }
@@ -65,7 +65,7 @@ public abstract class AbsPropertyUtils {
         try {
             return Boolean.parseBoolean(value);
         } catch (Exception e) {
-            Log.error("VException: getBoolValue: " + e.getMessage());
+            LogUtils.error("VException: getBoolValue: " + e.getMessage());
         }
         return false;
     }

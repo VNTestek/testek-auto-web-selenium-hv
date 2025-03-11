@@ -3,7 +3,7 @@ package com.testek.projects.common;
 import com.testek.consts.FrameConst;
 import com.testek.database.DatabaseInfo;
 import com.testek.database.DatabaseType;
-import com.testek.utils.Log;
+import com.testek.utils.LogUtils;
 import com.testek.utils.configloader.AbsPropertyUtils;
 import com.testek.utils.configloader.ResourceReader;
 import lombok.Getter;
@@ -22,7 +22,6 @@ import static java.util.Locale.JAPANESE;
  * Properties which loading from project configuration
  */
 public class PropertiesUtils extends AbsPropertyUtils {
-    private static FileInputStream file;
     private static ResourceBundle resourceConfig;
 
     @Getter
@@ -62,7 +61,7 @@ public class PropertiesUtils extends AbsPropertyUtils {
             if (resourceConfig == null) getInstance(properties.getProperty("language"));
             return resourceConfig.getString(key);
         } catch (Exception e) {
-            Log.error("VException: getLanguageValue: " + e.getMessage());
+            LogUtils.error("VException: getLanguageValue: " + e.getMessage());
             return null;
         }
     }
@@ -187,7 +186,7 @@ public class PropertiesUtils extends AbsPropertyUtils {
                 properties.putAll(tempProp);
             }
         } catch (Exception e) {
-            Log.error("VException: loadAllFiles: " + e.getMessage());
+            LogUtils.error("VException: loadAllFiles: " + e.getMessage());
         }
     }
 
@@ -253,10 +252,10 @@ public class PropertiesUtils extends AbsPropertyUtils {
      */
     public static String readDataFromFile(String filePath) {
         try {
-            Log.info("Read configuration data from: " + filePath);
+            LogUtils.info("Read configuration data from: " + filePath);
             return ResourceReader.readDataFromResource(filePath);
         } catch (IOException e) {
-            Log.error("Error: " + e.getMessage());
+            LogUtils.error("Error: " + e.getMessage());
         }
         return null;
     }

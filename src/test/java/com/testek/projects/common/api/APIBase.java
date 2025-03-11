@@ -5,10 +5,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.testek.consts.FrameConst;
-import com.testek.datadriven.DataModel;
 import com.testek.report.ExtentReportManager;
 import com.testek.report.ExtentTestManager;
-import com.testek.utils.Log;
+import com.testek.utils.LogUtils;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -39,7 +38,7 @@ public class APIBase {
         }
 
         if (!isResult) {
-            Log.info(String.format("%s -> VERIFY : %s", errMsg, isResult));
+            LogUtils.info(String.format("%s -> VERIFY : %s", errMsg, isResult));
             //AllureManager.saveTextLog(String.format("%s -> VERIFY : %s", errMsg, isResult));
         }
         switch (failureHandling) {
@@ -71,7 +70,7 @@ public class APIBase {
             errMsg = "Verify FALSE object: ";
         }
         if (isResult) {
-            Log.info(String.format("%s -> VERIFY : %s", errMsg, !isResult));
+            LogUtils.info(String.format("%s -> VERIFY : %s", errMsg, !isResult));
             ExtentReportManager.logMessage(errMsg);
             //AllureManager.saveTextLog(String.format("%s -> VERIFY : %s", errMsg + "\n" + apiLog, !isResult));
         }
@@ -107,7 +106,7 @@ public class APIBase {
         errMsg = String.format("%s - Actual: %s ; Expected: %s", errMsg, actual.toString(), expected.toString());
 
         if (!isResult) {
-            Log.info(String.format("%s -> VERIFY : %s", errMsg, isResult));
+            LogUtils.info(String.format("%s -> VERIFY : %s", errMsg, isResult));
         }
 
         switch (failureHandling) {
@@ -136,7 +135,7 @@ public class APIBase {
         try {
             MatcherAssert.assertThat(actual, matcher);
         } catch (AssertionError e) {
-            Log.error(e.getMessage());
+            LogUtils.error(e.getMessage());
             Reporter.getCurrentTestResult().setStatus(ITestResult.FAILURE);
             ExtentReportManager.fail(String.format("%s -> \nVERIFY : %s", e.getMessage(), FAIL));
         }
@@ -271,7 +270,7 @@ public class APIBase {
         try {
             return new ObjectMapper().readValue(response.asString(), HashMap.class);
         } catch (JsonProcessingException e) {
-            Log.info("VDebug: Convert the response to HashMap: FAILED");
+            LogUtils.info("VDebug: Convert the response to HashMap: FAILED");
             return new HashMap<>();
         }
 

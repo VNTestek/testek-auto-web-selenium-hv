@@ -24,13 +24,16 @@ public class ChromeBrowserDriver extends BrowserDriver {
         chromeOptions.addArguments("--start-maximized");
         chromeOptions.addArguments("--disable-infobars");
         chromeOptions.addArguments("--disable-notifications");
-        //chromeOptions.addArguments("window-size=1940,1050");
+        chromeOptions.addArguments("--disable-gpu");
+        chromeOptions.addArguments("--no-sandbox"); // Bypass OS security model, useful for CI
         chromeOptions.addArguments("--no-sandbox");
         chromeOptions.setAcceptInsecureCerts(true);
-        chromeOptions.setHeadless(Boolean.parseBoolean(HEADLESS));
-        LoggingPreferences logPrefs = new LoggingPreferences();
-        logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
-        chromeOptions.setCapability("goog:loggingPrefs", logPrefs);
+
+        if (HEADLESS) chromeOptions.addArguments("--headless");
+
+        LoggingPreferences logProfs = new LoggingPreferences();
+        logProfs.enable(LogType.PERFORMANCE, Level.ALL);
+        chromeOptions.setCapability("goog:loggingPrefs", logProfs);
         if (isLoadings.length > 0 && isLoadings[0])
             chromeOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);
 

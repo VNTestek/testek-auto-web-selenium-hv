@@ -2,7 +2,7 @@ package com.testek.driver;
 
 import com.testek.consts.FrameConst;
 import com.testek.exceptions.TargetNotValidException;
-import com.testek.utils.Log;
+import com.testek.utils.LogUtils;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.LocalFileDetector;
@@ -11,7 +11,6 @@ import org.openqa.selenium.support.ThreadGuard;
 
 import java.net.URL;
 import java.util.EnumMap;
-import java.util.HashMap;
 
 import static com.testek.consts.FrameConst.ProjectConfig.*;
 
@@ -19,8 +18,6 @@ import static com.testek.consts.FrameConst.ProjectConfig.*;
  * Browser Factory, you can create the driver and get the options.
  */
 public class BrowserFactory {
-    //final static HashMap<FrameConst.Browser, BrowserDriver> browserDriverMap;
-
     final static  EnumMap<FrameConst.Browser, BrowserDriver> browserDriverMap;
     static {
         browserDriverMap = new EnumMap<>(FrameConst.Browser.class);
@@ -58,9 +55,10 @@ public class BrowserFactory {
                     throw new TargetNotValidException(target.toString());
             }
         } catch (Exception e) {
-            Log.error("Browser|Target not supported: " + e.getMessage());
+            LogUtils.error("Browser|Target not supported: " + e.getMessage());
             throw new IllegalArgumentException("Browser|Target not supported: " + e.getMessage());
         }
+
         /* Update the WebDriverManager with the current WebDriver */
         webdriver = ThreadGuard.protect(webdriver);
         DriverManager.setDriver(webdriver);
@@ -80,8 +78,8 @@ public class BrowserFactory {
             remoteWebDriver = new RemoteWebDriver(new URL(remoteURL), capability);
             remoteWebDriver.setFileDetector(new LocalFileDetector());
         } catch (Exception e) {
-            Log.error("Remote URL is invalid or Remote Port is not available");
-            Log.error(String.format("Browser: %s", capability.getBrowserName()), e);
+            LogUtils.error("Remote URL is invalid or Remote Port is not available");
+            LogUtils.error(String.format("Browser: %s", capability.getBrowserName()), e);
             throw new IllegalArgumentException("Browser|Target is not available: " + e.getMessage());
         }
         return remoteWebDriver;

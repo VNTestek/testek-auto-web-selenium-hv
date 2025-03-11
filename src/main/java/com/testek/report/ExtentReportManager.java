@@ -17,7 +17,7 @@ import com.testek.consts.FrameConst.CategoryType;
 import com.testek.consts.FrameConst.ReportConst;
 import com.testek.driver.DriverManager;
 import com.testek.utils.IconUtils;
-import com.testek.utils.Log;
+import com.testek.utils.LogUtils;
 import com.testek.utils.ReportUtils;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
@@ -77,7 +77,7 @@ public final class ExtentReportManager {
         File file = new File(screenshotPath);
         if (!file.exists()) {
             file.mkdir();
-            Log.info("captureScreenshot: Create folder: " + file);
+            LogUtils.info("captureScreenshot: Create folder: " + file);
         }
     }
 
@@ -87,7 +87,15 @@ public final class ExtentReportManager {
         spark.config().setDocumentTitle(REPORT_TITLE + " Test version " + testVersion);
         spark.config().setReportName(REPORT_TITLE + " Test version " + testVersion);
         spark.config().setEncoding("UTF-8");
-        spark.viewConfigurer().viewOrder().as(new ViewName[]{ViewName.DASHBOARD, ViewName.TEST, ViewName.CATEGORY, ViewName.DEVICE, ViewName.EXCEPTION, ViewName.AUTHOR, ViewName.LOG}).apply();
+        spark.viewConfigurer().viewOrder().as(
+                new ViewName[]{
+                        ViewName.DASHBOARD,
+                        ViewName.TEST,
+                        ViewName.CATEGORY,
+                        ViewName.DEVICE,
+                        ViewName.EXCEPTION,
+                        ViewName.AUTHOR,
+                        ViewName.LOG}).apply();
     }
 
     public static void flushReports() {
@@ -306,7 +314,7 @@ public final class ExtentReportManager {
             File f = new File(ReportConst.EXTENT_REPORT_FILE_PATH);
             FileUtils.writeStringToFile(f, stringBuilder.toString(), StandardCharsets.UTF_8);
         } catch (Exception e) {
-            Log.error("VException: " + e.getMessage());
+            LogUtils.error("VException: " + e.getMessage());
         }
     }
 }

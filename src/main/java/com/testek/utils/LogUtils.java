@@ -6,8 +6,8 @@ import org.apache.logging.log4j.Logger;
 /**
  * Generate a log message
  */
-public class Log {
-    private static final Logger LOGGER = LogManager.getLogger(Log.class);
+public class LogUtils {
+    private static final Logger LOGGER = LogManager.getLogger(LogUtils.class);
     public static void info(String message) {
         LOGGER.info(message);
     }

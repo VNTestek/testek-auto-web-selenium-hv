@@ -1,5 +1,5 @@
 {
-  "Testek_CreateProduct_001_Valid": [
+  "TK_CreateProduct_001_Valid": [
     {
       "Description": "Verify create new product success",
       "Id": "Valid-CreateProduct_01",

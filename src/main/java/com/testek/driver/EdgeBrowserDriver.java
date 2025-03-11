@@ -19,7 +19,7 @@ public class EdgeBrowserDriver extends BrowserDriver {
         EdgeOptions edgeOptions = new EdgeOptions();
         edgeOptions.addArguments("--start-maximized");
         edgeOptions.setAcceptInsecureCerts(true);
-        edgeOptions.setHeadless(Boolean.parseBoolean(HEADLESS));
+        if(HEADLESS) edgeOptions.addArguments("--headless");
 
         if (isLoadings.length > 0 && isLoadings[0])
             edgeOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);

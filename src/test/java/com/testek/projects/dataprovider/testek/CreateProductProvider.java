@@ -12,8 +12,8 @@ public class CreateProductProvider extends BaseProvider {
     JsonUtils jsonUtils = JsonUtils.getInstance();
 
 
-    @DataProvider(name = "Testek_CreateProduct_001_Valid")
-    public  Object[][] Testek_CreateProduct_001_Valid (Method method) {
+    @DataProvider(name = "TK_CreateProduct_001_Valid")
+    public  Object[][] TK_CreateProduct_001_Valid (Method method) {
 
         var dataList = jsonUtils.readDataTestFromJSON(DataPath.DATA_CREATE_PRODUCT, method.getName());
 

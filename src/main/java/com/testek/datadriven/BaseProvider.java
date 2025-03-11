@@ -2,7 +2,7 @@ package com.testek.datadriven;
 
 
 
-import com.testek.utils.Log;
+import com.testek.utils.LogUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -11,7 +11,7 @@ import java.util.*;
 public class BaseProvider {
 
     /**
-     * Merge 2 objec to one object
+     * Merge 2 object to one object
      *
      */
     public static <T> T mergeObjects(T first, T second) {
@@ -28,12 +28,12 @@ public class BaseProvider {
                 field.set(result, value);
             }
         } catch (Exception e) {
-            Log.error("mergeObjects: Unable to merge 2 objects " + e.getMessage());
+            LogUtils.error("mergeObjects: Unable to merge 2 objects " + e.getMessage());
         }
         return (T) result;
     }
 
-    protected <T> Object[][] updateDataModel(T className, List<Hashtable<String, Object>> dataList, boolean isFirst) {
+    protected <T> void updateDataModel(T className, List<Hashtable<String, Object>> dataList, boolean isFirst) {
         List<Object> finalResult = new ArrayList<>();
         dataList.forEach(data -> {
             Field[] fields = className.getClass().getFields();
@@ -53,12 +53,12 @@ public class BaseProvider {
                     } else {
                         DataModel model = (DataModel) obj;
                         Object newModel = mergeObjects(data.get(model.getDevName()), model);
-                        Log.info(model);
+                        LogUtils.info(model);
                         f.set(className, newModel);
                         data.put(model.getDevName(), newModel);
                     }
                 } catch (Exception e) {
-                    Log.info("updateDataModel: Unable to read data from DataDriven - convert XLS to Object " + e.getMessage());
+                    LogUtils.info("updateDataModel: Unable to read data from DataDriven - convert XLS to Object " + e.getMessage());
                 }
             });
             if (isFirst) {
@@ -67,14 +67,13 @@ public class BaseProvider {
         });
 
         // Return Form
-        Object[][] data = null;
+        Object[][] data;
         if (isFirst) {
             data = new Object[finalResult.size()][1];
             for (int i = 0; i < finalResult.size(); i++) {
                 data[i][0] = finalResult.get(i);
             }
         }
-        return data;
     }
 
     /**
@@ -126,12 +125,12 @@ public class BaseProvider {
                             }
                         }
                     } catch (Exception e) {
-                         Log.info("updateModel: Unable to read data from DataDriven - Convert XLS to Object " + e.getMessage());
+                         LogUtils.info("updateModel: Unable to read data from DataDriven - Convert XLS to Object " + e.getMessage());
                     }
                 });
                 finalResult.add(item);
             } catch (Exception e) {
-                Log.info("updateModel : Unable to read data from DataDriven - Convert XLS to Object " + e.getMessage());
+                LogUtils.info("updateModel : Unable to read data from DataDriven - Convert XLS to Object " + e.getMessage());
             }
         });
 

@@ -16,7 +16,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface FrameAnnotation {
     CategoryType[] category();
+
     AuthorType[] author();
+
     @Nullable
     AuthorType[] reviewer();
 }

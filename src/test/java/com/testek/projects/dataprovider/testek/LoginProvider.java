@@ -12,8 +12,8 @@ public class LoginProvider extends BaseProvider {
     JsonUtils jsonUtils = JsonUtils.getInstance();
 
 
-    @DataProvider(name = "Testek_Login_001_Valid")
-    public  Object[][] Testek_Login_001_Valid(Method method) {
+    @DataProvider(name = "TK_Login_001_Valid")
+    public  Object[][] TK_Login_001_Valid(Method method) {
 
         var dataList = jsonUtils.readDataTestFromJSON(DataPath.DATA_LOGIN, method.getName());
 
@@ -22,8 +22,8 @@ public class LoginProvider extends BaseProvider {
         return updateDataModel(templateModel, dataList);
     }
 
-    @DataProvider(name = "Testek_Login_Demo_Valid")
-    public  Object[][] Testek_Login_Demo_Valid(Method method) {
+    @DataProvider(name = "TK_Login_Demo_Valid")
+    public  Object[][] TK_Login_Demo_Valid(Method method) {
 
         var dataList = jsonUtils.readDataDrivenFromJSON(DataPath.DATA_LOGIN_DEMO, method.getName());
 

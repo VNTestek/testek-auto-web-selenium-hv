@@ -1,6 +1,6 @@
 package com.testek.utils.configloader;
 
-import com.testek.utils.Log;
+import com.testek.utils.LogUtils;
 import org.apache.commons.io.FileUtils;
 import org.monte.media.Format;
 import org.monte.media.FormatKeys;
@@ -65,7 +65,7 @@ public class CaptureUtils extends ScreenRecorder {
 
             screenRecorder.start();
         } catch (Exception e) {
-            Log.error("VException: " + e.getMessage());
+            LogUtils.error("VException: " + e.getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ public class CaptureUtils extends ScreenRecorder {
         try {
             screenRecorder.stop();
         } catch (IOException e) {
-            Log.error("VException: " + e.getMessage());
+            LogUtils.error("VException: " + e.getMessage());
         }
     }
 
@@ -92,15 +92,15 @@ public class CaptureUtils extends ScreenRecorder {
             File file = new File(path);
             if (!file.exists()) {
                 file.mkdir();
-                Log.info("captureScreenshot: Create folder: " + file);
+                LogUtils.info("captureScreenshot: Create folder: " + file);
             }
 
             TakesScreenshot ts = (TakesScreenshot) driver;
             File source = ts.getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(source, new File(path + File.separator + fileName + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".png"));
-            Log.info("captureScreenshot: Screenshot taken current URL: " + driver.getCurrentUrl());
+            LogUtils.info("captureScreenshot: Screenshot taken current URL: " + driver.getCurrentUrl());
         } catch (Exception e) {
-            Log.error("Exception while taking screenshot: " + e.getMessage());
+            LogUtils.error("Exception while taking screenshot: " + e.getMessage());
         }
     }
 

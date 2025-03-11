@@ -7,7 +7,7 @@ import com.testek.driver.DriverManager;
 import com.testek.projects.page.PageManagement;
 import com.testek.projects.page.pages.LoginPage;
 import com.testek.report.ExtentReportManager;
-import com.testek.utils.Log;
+import com.testek.utils.LogUtils;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -29,11 +29,9 @@ public class TestBase {
     @Parameters({"browser"})
     @BeforeSuite
     public void beforeSuite(@Optional("chrome") String browser) {
-        Log.info("TestBase: beforeSuite");
+        LogUtils.info("TestBase: beforeSuite");
         new File(FrameConst.PROJECT_PATH + "ExportData").deleteOnExit();
         BrowserFactory.initWebDriver(browser);
-
-        //ExtentReportManager.initReports(testName, APPLICATION_VERSION, APPLICATION_NAME, APPLICATION_ENV, true);
     }
 
     @BeforeTest(alwaysRun = true)
@@ -58,7 +56,7 @@ public class TestBase {
                     String temp = model.getTestId().getValue();
                     if (!temp.isEmpty()) dataId.set(temp);
                 } catch (Exception e) {
-                    Log.error("VException: " + e.getMessage());
+                    LogUtils.error("VException: " + e.getMessage());
                 }
             });
         }
@@ -83,7 +81,7 @@ public class TestBase {
 
     @AfterSuite(alwaysRun = true)
     public void closeDriver() {
-        Log.info("TestBase: Close Driver ");
+        LogUtils.info("TestBase: Close Driver ");
         DriverManager.quitDriver();
     }
 
