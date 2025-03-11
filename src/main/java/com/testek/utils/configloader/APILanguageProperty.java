@@ -15,7 +15,7 @@ public class APILanguageProperty {
         return Objects.nonNull(value) && value.contains(LANG_EN) ? LANG_EN : LANG_VI;
     }
 
-    public static void setLANGUAGE(String language) {
+    public static void setLanguage(String language) {
         LANGUAGE.set(language);
     }
 

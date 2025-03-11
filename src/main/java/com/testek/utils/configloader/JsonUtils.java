@@ -1,7 +1,7 @@
 package com.testek.utils.configloader;
 
 import com.testek.datadriven.DataModel;
-import com.testek.utils.Log;
+import com.testek.utils.LogUtils;
 import lombok.Getter;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
@@ -34,7 +34,7 @@ public class JsonUtils {
                 return FileUtils.readFileToString(file, StandardCharsets.UTF_8);
             }
         } catch (IOException e) {
-            Log.error(String.format("Exception occurred - Reading json file:%s\n%s ", filePath, e.getMessage()));
+            LogUtils.error(String.format("Exception occurred - Reading json file:%s\n%s ", filePath, e.getMessage()));
             throw new RuntimeException(e);
         }
         return "";
@@ -47,10 +47,10 @@ public class JsonUtils {
      */
     public static String readFileDataFromResource(String filePath) {
         try {
-            Log.info("Read configuration data from: " + filePath);
+            LogUtils.info("Read configuration data from: " + filePath);
             return ResourceReader.readDataFromResource(filePath);
         } catch (IOException e) {
-            Log.error("Error: " + e.getMessage());
+            LogUtils.error("Error: " + e.getMessage());
         }
         return null;
     }
@@ -74,7 +74,7 @@ public class JsonUtils {
                 dataListMap.add(rowDataMap);
             });
         } catch (Exception e) {
-            Log.error("VException: " + e.getMessage());
+            LogUtils.error("VException: " + e.getMessage());
         }
         return dataListMap;
     }
@@ -132,7 +132,7 @@ public class JsonUtils {
                 dataListMap.add(rowDataMap);
             });
         } catch (Exception e) {
-            Log.error("VException: " + e.getMessage());
+            LogUtils.error("VException: " + e.getMessage());
         }
         return dataListMap;
     }

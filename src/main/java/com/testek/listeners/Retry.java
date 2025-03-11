@@ -5,7 +5,7 @@ import org.testng.ITestResult;
 
 public class Retry implements IRetryAnalyzer {
     private static int status = ITestResult.CREATED;
-   // private final int maxRetry = Integer.parseInt(AbsPropertyUtils.getPropertyValue(FrameConst.ConfigProperties.RETRY_COUNT));
+    // private final int maxRetry = Integer.parseInt(AbsPropertyUtils.getPropertyValue(FrameConst.ConfigProperties.RETRY_COUNT));
     private int count = 0;
 
     public static int getRetryStatus() {
@@ -14,11 +14,11 @@ public class Retry implements IRetryAnalyzer {
 
     @Override
     public boolean retry(ITestResult result) {
-        boolean value = false;
         /*if (AbsPropertyUtils.getPropertyValue(FrameConst.ConfigProperties.RETRY_FAILED_TESTS).equalsIgnoreCase("yes")) {
             value = count < maxRetry;
             count++;
+            }
         }*/
-        return value;
+        return false;
     }
 }

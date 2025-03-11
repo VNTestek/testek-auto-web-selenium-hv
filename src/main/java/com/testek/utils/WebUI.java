@@ -107,8 +107,8 @@ public class WebUI {
      * Verify the URL Page
      */
     @Step("Verify the Page URL {pageUrl}")
-    public static boolean verifyPageUrl(String pageUrl, String msg) {
-        Log.info("Actual URL: " + DriverManager.getDriver().getCurrentUrl());
+    public static boolean verifyPageUrl(String pageUrl) {
+        LogUtils.info("Actual URL: " + DriverManager.getDriver().getCurrentUrl());
         return DriverManager.getDriver().getCurrentUrl().contains(pageUrl.trim());
     }
 
@@ -148,7 +148,7 @@ public class WebUI {
                 try {
                     DriverManager.getDriver().close();
                 } catch (NoSuchWindowException exception) {
-                    Log.info("Need research!");
+                    LogUtils.info("Need research!");
                 }
                 sleepMillisecond(500);
             }
@@ -252,7 +252,7 @@ public class WebUI {
      * @return : a by object of elements
      */
     public static By getByXpathDynamic(String locatorForm, String... keyValues) {
-        return By.xpath(getStringXPathDynamic(locatorForm, keyValues));
+        return By.xpath(getStringXPathDynamic(locatorForm, (Object) keyValues));
     }
 
 
@@ -267,7 +267,7 @@ public class WebUI {
     @SneakyThrows
     public static String getStringXPathDynamic(String xpath, Object... value) {
         if (Objects.isNull(xpath) || xpath.isEmpty()) {
-            Log.info("getXpathDynamic: Parameter passing error. The 'XPath' parameter is null.");
+            LogUtils.info("getXpathDynamic: Parameter passing error. The 'XPath' parameter is null.");
             throw new Exception("Warning !! The XPath is null.");
         } else {
             if (value.length == 0) return xpath;
@@ -482,7 +482,7 @@ public class WebUI {
             if (isJavaScripts.length == 0) getActions().moveToElement(element).perform();
             else hoverElementByJS(element);
         } catch (Exception e) {
-            Log.error("VException: hoverElement: " + e.getMessage());
+            LogUtils.error("VException: hoverElement: " + e.getMessage());
         }
     }
 
@@ -495,7 +495,7 @@ public class WebUI {
             String mouseOverScript = "if(document.createEvent){var evObj = document.createEvent('MouseEvents');evObj.initEvent('mouseover', " + " true, false); arguments[0].dispatchEvent(evObj);} else if(document.createEventObject) { arguments[0].fireEvent('onmouseover');}";
             getJsExecutor().executeScript(mouseOverScript, element);
         } catch (Exception e) {
-            Log.error("VException: hoverElementByJS: " + e.getMessage());
+            LogUtils.error("VException: hoverElementByJS: " + e.getMessage());
         }
     }
 
@@ -554,7 +554,7 @@ public class WebUI {
 
         try {
             if (!isResult) {
-                Log.info(String.format("%s -> VERIFY : %s", errMsg, false));
+                LogUtils.info(String.format("%s -> VERIFY : %s", errMsg, false));
             }
             switch (failureHandling) {
                 case STOP_ON_FAILURE:
@@ -608,7 +608,7 @@ public class WebUI {
         }
         try {
             if (isResult) {
-                Log.info(String.format("%s -> VERIFY : %s", errMsg, !isResult));
+                LogUtils.info(String.format("%s -> VERIFY : %s", errMsg, !isResult));
                 ExtentReportManager.logMessage(errMsg);
             }
             switch (failureHandling) {
@@ -663,7 +663,7 @@ public class WebUI {
 
         try {
             if (!isResult) {
-                Log.info(String.format("%s -> VERIFY : %s", errMsg, false));
+                LogUtils.info(String.format("%s -> VERIFY : %s", errMsg, false));
             }
 
             switch (failureHandling) {
@@ -704,7 +704,7 @@ public class WebUI {
             try {
                 scrollElementToViewCenter(element);
             } catch (Exception e) {
-                Log.error("VException: " + e.getMessage());
+                LogUtils.error("VException: " + e.getMessage());
             }
 
             JavascriptExecutor js = getJsExecutor();
@@ -753,11 +753,11 @@ public class WebUI {
         try {
             WebElement obj = getWaitDriver().until(ExpectedConditions.visibilityOfElementLocated(by));
             if (Objects.nonNull(obj))
-                Log.info(String.format("waitForElementVisibleWithBy: Element %s : visible", by.toString()));
+                LogUtils.info(String.format("waitForElementVisibleWithBy: Element %s : visible", by.toString()));
             return obj;
         } catch (Exception e) {
             var elementList = DriverManager.getDriver().findElements(by);
-            Log.error(String.format("waitForElementVisibleWithBy: Element %s : invisible %s", by.toString(), elementList.isEmpty() ? "" : " Had more element with this XPATH. Please re-check!"));
+            LogUtils.error(String.format("waitForElementVisibleWithBy: Element %s : invisible %s", by.toString(), elementList.isEmpty() ? "" : " Had more element with this XPATH. Please re-check!"));
         }
         return null;
     }
@@ -774,11 +774,11 @@ public class WebUI {
         try {
             element = getWaitDriver().until(ExpectedConditions.visibilityOf(element));
         } catch (Exception e) {
-            Log.info(msg);
+            LogUtils.info(msg);
             element = null;
         }
         if (Objects.nonNull(element)) msg = String.format("waitForElementVisible: Element %s : visible", locator);
-        Log.info(msg);
+        LogUtils.info(msg);
         return element;
     }
 
@@ -788,12 +788,12 @@ public class WebUI {
         try {
             element = getWaitDriver().until(ExpectedConditions.elementToBeClickable(by));
         } catch (Exception e) {
-            Log.info(msg);
+            LogUtils.info(msg);
             element = null;
         }
         if (Objects.nonNull(element))
             msg = String.format("waitForElementClickableBy: Element %s : clickable", by);
-        Log.info(msg);
+        LogUtils.info(msg);
         return element;
     }
 
@@ -806,11 +806,11 @@ public class WebUI {
         try {
             element = getWaitDriver().until(ExpectedConditions.elementToBeClickable(element));
         } catch (Exception e) {
-            Log.info(msg);
+            LogUtils.info(msg);
             element = null;
         }
         if (Objects.nonNull(element)) msg = String.format("waitForElementClickable: Element %s : clickable", locator);
-        Log.info(msg);
+        LogUtils.info(msg);
         return element;
     }
 
@@ -821,7 +821,7 @@ public class WebUI {
         try {
             return getWaitDriver().until(ExpectedConditions.presenceOfElementLocated(by));
         } catch (Throwable error) {
-            Log.error("Element not exist. " + by.toString());
+            LogUtils.error("Element not exist. " + by.toString());
         }
         return null;
     }
@@ -942,7 +942,7 @@ public class WebUI {
         try {
             sleep((long) (second * 1000));
         } catch (InterruptedException e) {
-            Log.error("VException: " + e.getMessage());
+            LogUtils.error("VException: " + e.getMessage());
         }
     }
 
@@ -950,7 +950,7 @@ public class WebUI {
         try {
             sleep((long) (millisecond));
         } catch (InterruptedException e) {
-            Log.error("VException: " + e.getMessage());
+            LogUtils.error("VException: " + e.getMessage());
         }
     }
 
@@ -1001,7 +1001,7 @@ public class WebUI {
         try {
             rb = new Robot();
         } catch (AWTException e) {
-            Log.error("VException: " + e.getMessage());
+            LogUtils.error("VException: " + e.getMessage());
         }
 
         // Copy File path vào Clipboard
@@ -1028,7 +1028,7 @@ public class WebUI {
 
     public static String getPageTitle() {
         String title = DriverManager.getDriver().getTitle();
-        Log.info("getPageTitle: Page Title: " + title);
+        LogUtils.info("getPageTitle: Page Title: " + title);
         return title;
     }
 

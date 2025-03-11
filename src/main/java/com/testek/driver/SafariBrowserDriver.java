@@ -29,7 +29,7 @@ public class SafariBrowserDriver extends BrowserDriver {
         SafariOptions safariOptions = new SafariOptions();
         safariOptions.setAutomaticInspection(false);
 
-        if (Boolean.parseBoolean(HEADLESS))
+        if (HEADLESS)
             throw new HeadlessNotSupportedException(safariOptions.getBrowserName());
         return safariOptions;
     }

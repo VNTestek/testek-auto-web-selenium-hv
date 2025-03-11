@@ -8,10 +8,10 @@ package com.testek.consts;
 public enum AuthorType {
 
     //region Automation Engineer
-    Testek,           // Testek - Automation Engineer
+    ADMIN,
     // endregion
 
     // region Reviewer
-    Vincent,          // Vincent - Reviewer
+    Vincent,
     // endregion
 }

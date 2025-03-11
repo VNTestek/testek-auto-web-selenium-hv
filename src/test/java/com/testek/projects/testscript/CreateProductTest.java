@@ -24,20 +24,20 @@ public class CreateProductTest extends TestBase {
 
     @BeforeMethod(alwaysRun = true)
     public void beforeMethod() {
-        productPage = homePage.gotoProductPage();
+        productPage = homePage.gotoProductPage();   // Access to Product page
     }
 
-    @FrameAnnotation(category = {FrameConst.CategoryType.REGRESSION}, author = {AuthorType.Testek}, reviewer = {AuthorType.Vincent})
-    @Test(description = "Verify creating a new product", dataProvider = "Testek_CreateProduct_001_Valid", dataProviderClass = CreateProductProvider.class)
-    public void Testek_CreateProduct_001_Valid(CreateProductModel createProductModel) {
-        productPage.verifyProductPageDisplay();
+    @FrameAnnotation(category = {FrameConst.CategoryType.REGRESSION}, author = {AuthorType.Vincent}, reviewer = {AuthorType.Vincent})
+    @Test(description = "Verify creating a new product", dataProvider = "TK_CreateProduct_001_Valid", dataProviderClass = CreateProductProvider.class)
+    public void TK_CreateProduct_001_Valid(CreateProductModel createProductModel) {
+        productPage.verifyProductPageDisplay(); // Verify product page hien thi
 
-        productPage.clickToCreateProduct()
+        productPage.clickToCreateProduct()      // Click button Create Product
                 .fillProductForm(createProductModel)
                 .clickAddPrd();
 
         // Verify the login successfully
-        productPage.verifyPopupSuccessDisplay();
+        productPage.verifyPopupSuccessDisplay();        // Verify popup success hien thi
     }
 
 }

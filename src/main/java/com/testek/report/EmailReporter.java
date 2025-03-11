@@ -1,11 +1,12 @@
 package com.testek.report;
 
 import com.testek.consts.FrameConst;
-import com.testek.utils.Log;
+import com.testek.utils.LogUtils;
+import lombok.Getter;
+import lombok.Setter;
 import org.testng.*;
 import org.testng.collections.Lists;
 import org.testng.internal.Utils;
-import org.testng.log4testng.Logger;
 import org.testng.xml.XmlSuite;
 
 import java.io.*;
@@ -18,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static com.testek.consts.FrameConst.ProjectConfig.*;
+import static com.testek.consts.FrameConst.ProjectConfig.PROJECT_NAME;
 import static org.testng.ITestResult.*;
 
 public class EmailReporter implements IReporter {
@@ -31,13 +32,13 @@ public class EmailReporter implements IReporter {
     public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
         try {
             String reportFileName = "emailable_report2.html";
-            writerReport = createWriter("ExtentReports", reportFileName);
+            writerReport = createWriter(reportFileName);
             String suiteFileName = "test-failed.xml";
-            writerSuite = createWriter("ExtentReports", suiteFileName);
+            writerSuite = createWriter(suiteFileName);
             String resultFileName = "test-result.txt";
-            writerResult = createWriter("ExtentReports", resultFileName);
+            writerResult = createWriter(resultFileName);
         } catch (IOException e) {
-            Log.error("Unable to create output file", e);
+            LogUtils.error("Unable to create output file", e);
             return;
         }
         for (ISuite suite : suites) {
@@ -54,10 +55,10 @@ public class EmailReporter implements IReporter {
         writerResult.close();
     }
 
-    protected PrintWriter createWriter(String outDir, String fileName) throws IOException {
-        File file = new File(outDir);
+    protected PrintWriter createWriter(String fileName) throws IOException {
+        File file = new File("ExtentReports");
         if (!file.exists()) file.mkdirs();
-        OutputStream os = Files.newOutputStream(Paths.get(outDir + File.separator + fileName));
+        OutputStream os = Files.newOutputStream(Paths.get("ExtentReports" + File.separator + fileName));
         return new PrintWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8));
     }
 
@@ -175,12 +176,12 @@ public class EmailReporter implements IReporter {
                 writeTableData(integerFormat.format(passedTests), "numbold");
                 writeTableData(integerFormat.format(failedTests), "numbold");
                 writeTableData(integerFormat.format(skippedTests), "numbold");
-                writeTableData(dateFormat.format(startTime),  "numbold");
-                writeTableData(dateFormat.format(endTime),  "numbold");
+                writeTableData(dateFormat.format(startTime), "numbold");
+                writeTableData(dateFormat.format(endTime), "numbold");
                 writeTableData(convertTimeToString(duration), "numbold");
                 writerReport.println("</tr>");
 
-                totalTestsCount +=testsCount;
+                totalTestsCount += testsCount;
                 totalPassedTests += passedTests;
                 totalSkippedTests += skippedTests;
                 totalFailedTests += failedTests;
@@ -192,14 +193,14 @@ public class EmailReporter implements IReporter {
                 for (ClassResult classResult : classResults) {
                     buffer.setLength(0);
                     String className = classResult.getClassName();
-                    writeTableData(buffer.append(Utils.escapeHtml(className.substring(className.lastIndexOf(".")+1))).toString());
+                    writeTableData(buffer.append(Utils.escapeHtml(className.substring(className.lastIndexOf(".") + 1))).toString());
                     writeTableData(integerFormat.format(classResult.getMethodResults().size()), "num");
                     writeTableData(integerFormat.format(classResult.nPassTC), "num");
-                    writeTableData(integerFormat.format(classResult.nFailTC),"num");
-                    writeTableData(integerFormat.format(classResult.nSkipTC),"num");
-                    writeTableData(dateFormat.format(classResult.start),  "num");
-                    writeTableData(dateFormat.format(classResult.end),  "num");
-                    writeTableData(convertTimeToString(classResult.end-classResult.start), "num");
+                    writeTableData(integerFormat.format(classResult.nFailTC), "num");
+                    writeTableData(integerFormat.format(classResult.nSkipTC), "num");
+                    writeTableData(dateFormat.format(classResult.start), "num");
+                    writeTableData(dateFormat.format(classResult.end), "num");
+                    writeTableData(convertTimeToString(classResult.end - classResult.start), "num");
                     writerReport.println("</tr>");
                 }
 
@@ -212,7 +213,7 @@ public class EmailReporter implements IReporter {
             writerReport.print("<th>Total</th>");
             writeTableHeader(integerFormat.format(totalTestsCount), "num");
             writeTableHeader(integerFormat.format(totalPassedTests), "num");
-            writeTableHeader(integerFormat.format(totalFailedTests),"num");
+            writeTableHeader(integerFormat.format(totalFailedTests), "num");
             writeTableHeader(integerFormat.format(totalSkippedTests), "num");
             writerReport.print("<th colspan=\"2\"></th>");
             writeTableHeader(convertTimeToString(totalDuration), "num");
@@ -253,17 +254,17 @@ public class EmailReporter implements IReporter {
             writer.print("</th></tr></tbody>");
             */
             writerSuite.println(String.format("<suite name=\"%s - Retry\" parallel=\"%s\" thread-count=\"%s\">", suiteResult.getSuiteName(), suiteResult.parallel, suiteResult.noThread));
-            if (suiteResult.listeners.size()>0) {
+            if (!suiteResult.listeners.isEmpty()) {
                 writerSuite.println("\t<listeners>");
-                suiteResult.listeners.stream().forEach(item -> {
-                    writerSuite.println(String.format("\t\t<listener class-name=\"%s\"/>", item));
-                });
+                suiteResult.listeners.forEach(
+                        item -> writerSuite.println(String.format("\t\t<listener class-name=\"%s\"/>", item)));
                 writerSuite.println("\t</listeners>");
             }
-            if (suiteResult.parameters.size()>0) {
-                suiteResult.parameters.entrySet().stream().forEach(item -> {
-                    writerSuite.println(String.format("\t<parameter name=\"%s\" value=\"%s\"/>", item.getKey(), item.getValue()));
-                });
+            if (!suiteResult.parameters.isEmpty()) {
+                suiteResult.parameters.forEach(
+                        (key, value)
+                                -> writerSuite.println(String.format("\t<parameter name=\"%s\" value=\"%s\"/>", key, value))
+                );
             }
             writerResult.println(suiteResult.getSuiteName());
             for (TestResult testResult : suiteResult.getTestResults()) {
@@ -273,10 +274,10 @@ public class EmailReporter implements IReporter {
                 int startIndex = scenarioIndex;
                 writerSuite.println(String.format("\t<test name=\"%s - Retry\">", testResult.getTestName()));
                 writerResult.println(testResult.getTestName());
-                if (testResult.parameters.size()>0) {
-                    testResult.parameters.entrySet().stream().forEach(item -> {
-                        writerSuite.println(String.format("\t\t<parameter name=\"%s\" value=\"%s\"/>", item.getKey(), item.getValue()));
-                    });
+                if (!testResult.parameters.isEmpty()) {
+                    testResult.parameters.forEach(
+                            (key, value)
+                                    -> writerSuite.println(String.format("\t\t<parameter name=\"%s\" value=\"%s\"/>", key, value)));
                 }
                 scenarioIndex += writeScenarioSummary(testName, testResult.getAllClassTestResults(), scenarioIndex);
 
@@ -284,7 +285,7 @@ public class EmailReporter implements IReporter {
                     writerReport.print("<tr><th colspan=\"4\" class=\"invisible\"/></tr>");
                 }
 
-                for(ITestNGMethod method : testResult.methods) {
+                for (ITestNGMethod method : testResult.methods) {
                     if (method.getEnabled()) {
                         writerSuite.println(String.format("<!--<class name=\"%s\">\n<method>\n<include name=\"%s\"/>\n</method>\n</class>-->", method.getTestClass().getName(), method.getMethodName()));
                         writerResult.println(String.format("%s\t%s\t%s\t%s", method.getMethodName(), method.getDescription(), method.getTestClass().getName(), "SKIPPED"));
@@ -322,7 +323,7 @@ public class EmailReporter implements IReporter {
                 int scenariosPerClass = 0;
                 boolean isFirst = true;
                 String className = classResult.getClassName();
-                className = className.substring(className.lastIndexOf(".")+1);
+                className = className.substring(className.lastIndexOf(".") + 1);
                 StringBuilder testBuffer = new StringBuilder();
                 Set<String> dependMethods = new HashSet<>();
                 for (MethodResult methodResult : classResult.getMethodResults()) {
@@ -332,18 +333,18 @@ public class EmailReporter implements IReporter {
                     String methodName = Utils.escapeHtml(methodResult.methodName);
                     for (ITestResult result : results) {
                         String desc = result.getAttributeNames().contains("description") ? (String) result.getAttribute("description") : result.getMethod().getDescription();
-                        String invo = result.getAttributeNames().contains("invocation") ? result.getAttribute("invocation").toString() : "0";
+                        String invocation = result.getAttributeNames().contains("invocation") ? result.getAttribute("invocation").toString() : "0";
 
-                        String testResult="";
-                        if (result.getStatus()==SUCCESS) {
+                        String testResult = "";
+                        if (result.getStatus() == SUCCESS) {
                             testResult = "passed";
                             resultsCount--;
-                        } else if (result.getStatus()==FAILURE)
+                        } else if (result.getStatus() == FAILURE)
                             testResult = "failed";
-                        else  if (result.getStatus()==SKIP)
+                        else if (result.getStatus() == SKIP)
                             testResult = "skipped";
 
-                        writerResult.println(String.format("%s\t[%s] %s\t%s\t%s", methodName, invo, desc, className, testResult.toUpperCase()));
+                        writerResult.println(String.format("%s\t[%s] %s\t%s\t%s", methodName, invocation, desc, className, testResult.toUpperCase()));
 
                         if (testResult.equals("passed"))
                             continue;
@@ -359,9 +360,9 @@ public class EmailReporter implements IReporter {
                             isFirst = false;
                         }
 
-                        sb.append(invo).append(" ");
+                        sb.append(invocation).append(" ");
                         buffer.append("<td>").append(methodName)
-                                .append("</td><td rowspan=\"\">").append(String.format("[%s] %s", invo, desc))
+                                .append("</td><td rowspan=\"\">").append(String.format("[%s] %s", invocation, desc))
                                 .append("</td><td rowspan=\"\">").append(formatter.format(startTime.getTime()))
                                 .append("</td><td rowspan=\"\">").append(formatter.format(endTime.getTime()))
                                 .append("</td><td rowspan=\"\">").append(convertTimeToString(result.getEndMillis() - result.getStartMillis()))
@@ -373,15 +374,15 @@ public class EmailReporter implements IReporter {
 
                     }
                     scenariosPerClass += resultsCount;
-                    if (sb.length()>0) {
+                    if (sb.length() > 0) {
                         testBuffer.append(String.format("\t\t\t\t\t<include name=\"%s\" invocation-numbers=\"%s\"/>\n", methodResult.methodName, sb.deleteCharAt(sb.length() - 1)));
                         for (String method : methodResult.getResults().get(0).getMethod().getMethodsDependedUpon()) {
-                            dependMethods.add(method.substring(method.lastIndexOf(".")+1));
+                            dependMethods.add(method.substring(method.lastIndexOf(".") + 1));
                         }
                     }
                 }
 
-                if (classResult.nFailTC==0 && classResult.nSkipTC==0)
+                if (classResult.nFailTC == 0 && classResult.nSkipTC == 0)
                     continue;
                 writerSuite.println(String.format("\t\t\t<class name=\"%s\">\n\t\t\t\t<methods>", classResult.getClassName()));
 
@@ -411,11 +412,9 @@ public class EmailReporter implements IReporter {
     /**
      * Writes a TH element with the specified contents and CSS class names.
      *
-     * @param html
-     *            the HTML contents
-     * @param cssClasses
-     *            the space-delimited CSS classes or null if there are no
-     *            classes to apply
+     * @param html       the HTML contents
+     * @param cssClasses the space-delimited CSS classes or null if there are no
+     *                   classes to apply
      */
     protected void writeTableHeader(String html, String cssClasses) {
         writeTag("th", html, cssClasses);
@@ -424,8 +423,7 @@ public class EmailReporter implements IReporter {
     /**
      * Writes a TD element with the specified contents.
      *
-     * @param html
-     *            the HTML contents
+     * @param html the HTML contents
      */
     protected void writeTableData(String html) {
         writeTableData(html, null);
@@ -434,11 +432,9 @@ public class EmailReporter implements IReporter {
     /**
      * Writes a TD element with the specified contents and CSS class names.
      *
-     * @param html
-     *            the HTML contents
-     * @param cssClasses
-     *            the space-delimited CSS classes or null if there are no
-     *            classes to apply
+     * @param html       the HTML contents
+     * @param cssClasses the space-delimited CSS classes or null if there are no
+     *                   classes to apply
      */
     protected void writeTableData(String html, String cssClasses) {
         writeTag("td", html, cssClasses);
@@ -448,13 +444,10 @@ public class EmailReporter implements IReporter {
      * Writes an arbitrary HTML element with the specified contents and CSS
      * class names.
      *
-     * @param tag
-     *            the tag name
-     * @param html
-     *            the HTML contents
-     * @param cssClasses
-     *            the space-delimited CSS classes or null if there are no
-     *            classes to apply
+     * @param tag        the tag name
+     * @param html       the HTML contents
+     * @param cssClasses the space-delimited CSS classes or null if there are no
+     *                   classes to apply
      */
     protected void writeTag(String tag, String html, String cssClasses) {
         writerReport.print("<");
@@ -475,11 +468,14 @@ public class EmailReporter implements IReporter {
      * Groups {@link TestResult}s by suite.
      */
     protected static class SuiteResult {
+        @Getter
         private final String suiteName;
         private String parallel;
         private int noThread;
         private Map<String, String> parameters;
         private List<String> listeners;
+
+        @Getter
         private final List<TestResult> testResults = Lists.newArrayList();
 
         public SuiteResult(ISuite suite) {
@@ -493,41 +489,30 @@ public class EmailReporter implements IReporter {
             }
         }
 
-        public String getSuiteName() {
-            return suiteName;
-        }
-
-        /**
-         * @return the test results (possibly empty)
-         */
-        public List<TestResult> getTestResults() {
-            return testResults;
-        }
     }
 
     /**
      * Groups {@link ClassResult}s by test, type (configuration or test), and
      * status.
      */
+    @Getter
+    @Setter
     protected static class TestResult {
         /**
          * Orders test results by class name and then by method name (in
          * lexicographic order).
          */
-        protected static final Comparator<ITestResult> RESULT_COMPARATOR = new Comparator<ITestResult>() {
-            @Override
-            public int compare(ITestResult o1, ITestResult o2) {
-                int result = o1.getTestClass().getName()
-                        .compareTo(o2.getTestClass().getName());
+        protected static final Comparator<ITestResult> RESULT_COMPARATOR = (o1, o2) -> {
+            int result = o1.getTestClass().getName()
+                    .compareTo(o2.getTestClass().getName());
+            if (result == 0) {
+                result = o1.getMethod().getMethodName()
+                        .compareTo(o2.getMethod().getMethodName());
                 if (result == 0) {
-                    result = o1.getMethod().getMethodName()
-                            .compareTo(o2.getMethod().getMethodName());
-                    if (result==0) {
-                        result = (int) (o1.getStartMillis() - o2.getStartMillis());
-                    }
+                    result = (int) (o1.getStartMillis() - o2.getStartMillis());
                 }
-                return result;
             }
+            return result;
         };
 
         private final String testName;
@@ -619,7 +604,7 @@ public class EmailReporter implements IReporter {
                         resultsPerMethod = Lists.newArrayList();
 
                         assert !resultsPerClass.isEmpty();
-                        classResults.add(new ClassResult(previousClassName,resultsPerClass));
+                        classResults.add(new ClassResult(previousClassName, resultsPerClass));
                         resultsPerClass = Lists.newArrayList();
 
                         previousClassName = className;
@@ -643,68 +628,30 @@ public class EmailReporter implements IReporter {
                 resultsPerClass.add(methodResult);
                 removeTestedMethod(methodResult);
                 assert !resultsPerClass.isEmpty();
-                classResults.add(new ClassResult(previousClassName,resultsPerClass));
+                classResults.add(new ClassResult(previousClassName, resultsPerClass));
             }
             return classResults;
         }
-
-        public String getTestName() {
-            return testName;
-        }
-
-        public Date getTestStartTime() {
-            return testStartTime;
-        }
-
-        public Date getTestEndTime() {
-            return testEndTime;
-        }
-
-        public List<ClassResult> getAllClassTestResults() {
-            return allClassTestResults;
-        }
-
-        public List<ClassResult> getAllConfigurationResults() {
-            return allConfigurationResults;
-        }
-        public int getFailedTestCount() {
-            return failedTestCount;
-        }
-
-        public int getSkippedTestCount() {
-            return skippedTestCount;
-        }
-
-        public int getPassedTestCount() {
-            return passedTestCount;
-        }
-
-        public long getDuration() {
-            return duration;
-        }
-
-        public int getTestCount() {
-            return testCount;
-        }
-
     }
 
     /**
      * Groups {@link MethodResult}s by class.
      */
+    @Getter
+    @Setter
     protected static class ClassResult {
         private final String className;
         private final List<MethodResult> methodResults;
-        int nPassTC=0, nFailTC=0, nSkipTC=0;
-        long start=Long.MAX_VALUE, end=Long.MIN_VALUE;
+        int nPassTC = 0, nFailTC = 0, nSkipTC = 0;
+        long start = Long.MAX_VALUE, end = Long.MIN_VALUE;
 
         public ClassResult(String className, List<MethodResult> methodResults) {
             this.className = className;
             this.methodResults = methodResults;
-            for (MethodResult result :methodResults) {
-                nPassTC+=result.pass;
-                nFailTC+=result.fail;
-                nSkipTC+= result.skip;
+            for (MethodResult result : methodResults) {
+                nPassTC += result.pass;
+                nFailTC += result.fail;
+                nSkipTC += result.skip;
 
                 if (start > result.start)
                     start = result.start;
@@ -712,14 +659,6 @@ public class EmailReporter implements IReporter {
                 if (end < result.end)
                     end = result.end;
             }
-        }
-
-        public String getClassName() {
-            return className;
-        }
-
-        public List<MethodResult> getMethodResults() {
-            return methodResults;
         }
 
         @Override
@@ -734,16 +673,18 @@ public class EmailReporter implements IReporter {
     /**
      * Groups test results by method.
      */
+    @Setter
+    @Getter
     protected static class MethodResult {
         private final List<ITestResult> results;
         private String methodName;
-        int pass=0, skip=0, fail=0;
-        long start=Long.MAX_VALUE, end=Long.MIN_VALUE;
+        int pass = 0, skip = 0, fail = 0;
+        long start = Long.MAX_VALUE, end = Long.MIN_VALUE;
 
         public MethodResult(String methodName, List<ITestResult> results) {
             this.results = results;
             this.methodName = methodName;
-            for(ITestResult result : results) {
+            for (ITestResult result : results) {
                 switch (result.getStatus()) {
                     case SKIP:
                         skip++;
@@ -763,10 +704,6 @@ public class EmailReporter implements IReporter {
                     end = result.getEndMillis();
 
             }
-        }
-
-        public List<ITestResult> getResults() {
-            return results;
         }
 
 

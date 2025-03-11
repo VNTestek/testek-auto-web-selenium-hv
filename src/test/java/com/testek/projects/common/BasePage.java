@@ -6,7 +6,7 @@ import com.testek.datadriven.DataModel;
 import com.testek.driver.DriverManager;
 import com.testek.projects.enums.ProjectConst;
 import com.testek.projects.page.pages.ProductPage;
-import com.testek.utils.Log;
+import com.testek.utils.LogUtils;
 import com.testek.utils.WebUI;
 import io.qameta.allure.Step;
 import lombok.Getter;
@@ -507,7 +507,7 @@ public class BasePage extends WebUI {
             var checkBox = checkBoxs.get(0);
             chooseCheckBox(checkBox, checkBoxValue);
         } catch (Exception error) {
-            Log.error("chooseCheckBoxByText: Normal text - Press Enter", error);
+            LogUtils.error("chooseCheckBoxByText: Normal text - Press Enter", error);
         }
 
         String msg = String.format("Insert text [%s] to [%s]  <br/> <span style='font-size: 0.75em'>(Element's locator:  %s)</span>", FrameConst.ReportConst.BOLD_START + checkBoxValue + FrameConst.ReportConst.BOLD_END, checkBoxTitle, finalXPath);
@@ -578,7 +578,7 @@ public class BasePage extends WebUI {
             else
                 assertTrueCondition(chkElement, classValue.contains("ms-checkbox-border-checked-false"), CONTINUE_ON_FAILURE, "Kiểm tra checkbox unticked");
         } catch (Exception e) {
-            Log.info("verifyCheckBoxByTitle - Exception : " + e.getMessage());
+            LogUtils.info("verifyCheckBoxByTitle - Exception : " + e.getMessage());
         }
     }
 
@@ -601,7 +601,7 @@ public class BasePage extends WebUI {
             else
                 assertTrueCondition(chkElement, classValue.contains("ms-checkbox-border-checked-false"), CONTINUE_ON_FAILURE, "Kiểm tra checkbox unticked");
         } catch (Exception e) {
-            Log.info("verifyCheckBoxByTitle - Exception : " + e.getMessage());
+            LogUtils.info("verifyCheckBoxByTitle - Exception : " + e.getMessage());
         }
     }
     // endregion
@@ -815,7 +815,7 @@ public class BasePage extends WebUI {
      */
     protected void goToSpecificURL(String URL, String pageTitle) {
         goToURL(URL);
-        assertTrueCondition(null, verifyPageUrl(URL, null), FrameConst.FailureHandling.CONTINUE_ON_FAILURE, String.format("Verify the '%s' page", pageTitle));
+        assertTrueCondition(null, verifyPageUrl(URL), FrameConst.FailureHandling.CONTINUE_ON_FAILURE, String.format("Verify the '%s' page", pageTitle));
         String msg = FrameConst.ReportConst.BOLD_START + FrameConst.Icon.ICON_NAVIGATE_RIGHT + " Go to URL : " + FrameConst.ReportConst.BOLD_END + DriverManager.getDriver().getCurrentUrl();
         addReportInfo(LogType.INFO, msg, null, null);
     }
