@@ -307,6 +307,7 @@ public class WebUI {
 
     @Step("Insert text {value} to {title}     (Element's locator: : {element})")
     public WebElement inputTextTo(Object object, String title, String value, boolean... isClear) {
+        // Handle logic for input text
         WebElement element = null;
         try {
             element = getWebElement(object);

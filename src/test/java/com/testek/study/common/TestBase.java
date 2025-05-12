@@ -28,7 +28,7 @@ public class TestBase {
     }
 
     /**
-     * Go to DemoQA Website
+     * Go to Test Website
      */
     public void gotoDemoQAWebsite(WebDriver webDriver) {
         String url = "https://demoqa.com/elements";
@@ -39,7 +39,7 @@ public class TestBase {
     }
 
     /**
-     * Go to DemoQA Website
+     * Go to Test Website
      */
     public void gotoDemoQAWebsite(WebDriver webDriver, String url) {
         webDriver.get(url);
