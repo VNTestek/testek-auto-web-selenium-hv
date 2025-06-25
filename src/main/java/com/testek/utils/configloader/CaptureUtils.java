@@ -1,6 +1,6 @@
 package com.testek.utils.configloader;
 
-import com.testek.utils.LogUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.monte.media.Format;
 import org.monte.media.FormatKeys;
@@ -17,8 +17,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.testek.consts.FrameConst.ReportConst.EXPORT_CAPTURE_PATH;
-import static com.testek.consts.FrameConst.ReportConst.EXPORT_VIDEO_PATH;
+import static com.testek.report.ReportConfig.*;
 import static org.monte.media.FormatKeys.*;
 import static org.monte.media.VideoFormatKeys.*;
 
@@ -26,6 +25,7 @@ import static org.monte.media.VideoFormatKeys.*;
  * CaptureHelpers class provides the ability to capture images or records video under execution
  * Using Monte Media library
  */
+@Slf4j
 public class CaptureUtils extends ScreenRecorder {
     private static ScreenRecorder screenRecorder;
     String name;
@@ -45,7 +45,7 @@ public class CaptureUtils extends ScreenRecorder {
      * @param fileName : The name of video file
      */
     public static void startRecord(String fileName) {
-        File file = new File("./" + EXPORT_VIDEO_PATH + File.separator + fileName + File.separator);
+        File file = new File( EXPORT_VIDEO_PATH + File.separator + fileName + File.separator);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = screenSize.width;
         int height = screenSize.height;
@@ -65,7 +65,7 @@ public class CaptureUtils extends ScreenRecorder {
 
             screenRecorder.start();
         } catch (Exception e) {
-            LogUtils.error("VException: " + e.getMessage());
+            log.error("VException: {}", e.getMessage());
         }
     }
 
@@ -75,8 +75,11 @@ public class CaptureUtils extends ScreenRecorder {
     public static void stopRecord() {
         try {
             screenRecorder.stop();
+            // Wait for the video file to be created
+            log.info("stopRecord: Video file created at: {}", EXPORT_VIDEO_PATH);
+
         } catch (IOException e) {
-            LogUtils.error("VException: " + e.getMessage());
+            log.error("VException: {}", e.getMessage());
         }
     }
 
@@ -88,19 +91,18 @@ public class CaptureUtils extends ScreenRecorder {
      */
     public static void captureScreenshot(WebDriver driver, String fileName) {
         try {
-            String path = System.getProperty("user.dir") + File.separator + EXPORT_CAPTURE_PATH;
-            File file = new File(path);
+            File file = new File(EXTENT_SCREENSHOT_PATH);
             if (!file.exists()) {
                 file.mkdir();
-                LogUtils.info("captureScreenshot: Create folder: " + file);
+                log.info("captureScreenshot: Create folder: {}", file);
             }
 
             TakesScreenshot ts = (TakesScreenshot) driver;
             File source = ts.getScreenshotAs(OutputType.FILE);
-            FileUtils.copyFile(source, new File(path + File.separator + fileName + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".png"));
-            LogUtils.info("captureScreenshot: Screenshot taken current URL: " + driver.getCurrentUrl());
+            FileUtils.copyFile(source, new File(EXTENT_SCREENSHOT_PATH + File.separator + fileName + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".png"));
+            log.info("captureScreenshot: Screenshot taken current URL: {}", driver.getCurrentUrl());
         } catch (Exception e) {
-            LogUtils.error("Exception while taking screenshot: " + e.getMessage());
+            log.error("Exception while taking screenshot: {}", e.getMessage());
         }
     }
 

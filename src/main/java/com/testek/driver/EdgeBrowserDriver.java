@@ -6,7 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 
-import static com.testek.consts.FrameConst.ProjectConfig.HEADLESS;
+import static com.testek.consts.FrameConst.ExecuteConfig.HEADLESS_FLAG;
+
 
 public class EdgeBrowserDriver extends BrowserDriver {
     @Override
@@ -19,7 +20,7 @@ public class EdgeBrowserDriver extends BrowserDriver {
         EdgeOptions edgeOptions = new EdgeOptions();
         edgeOptions.addArguments("--start-maximized");
         edgeOptions.setAcceptInsecureCerts(true);
-        if(HEADLESS) edgeOptions.addArguments("--headless");
+        if(HEADLESS_FLAG) edgeOptions.addArguments("--headless");
 
         if (isLoadings.length > 0 && isLoadings[0])
             edgeOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);

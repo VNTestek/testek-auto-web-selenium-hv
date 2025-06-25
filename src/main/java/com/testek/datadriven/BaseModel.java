@@ -8,7 +8,6 @@ import lombok.*;
  */
 @Getter
 @Setter
-//@Builder
 @AllArgsConstructor
 public class BaseModel {
     public DataModel testId;            // ID of test case

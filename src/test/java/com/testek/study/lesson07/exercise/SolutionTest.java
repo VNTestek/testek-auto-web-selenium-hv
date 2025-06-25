@@ -20,7 +20,7 @@ import static java.lang.Thread.sleep;
 @Setter
 public class SolutionTest {
     // The driver for interacting with the webpage
-    private WebDriver webDriver;
+    private WebDriver mWebDriver;
 
     /**
      * Method will be executed before each class, configure Chrome Driver and initialize
@@ -30,7 +30,7 @@ public class SolutionTest {
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--max-window-size");
         chromeOptions.addArguments("--remote-allow-origins=*");
-        webDriver = new ChromeDriver(chromeOptions);
+        mWebDriver = new ChromeDriver(chromeOptions);
     }
 
     /**
@@ -38,34 +38,49 @@ public class SolutionTest {
      **/
     @AfterClass
     public void afterClass() {
-        if (Objects.nonNull(webDriver)) webDriver.quit();
+        if (Objects.nonNull(mWebDriver)) mWebDriver.quit();
     }
 
     /**
      * URL: <a href="https://testek.vn/lab/auto/web-elements">...</a>
      * Access to Elements navigation
      */
-    @Test(description = "Element Interaction")
-    public void testInteraction() {
-        gotoTestWebsite();
+    @Test(description = "Element Interaction: Student Form")
+    public void testStudentForm() {
+        gotoTestWebsite(Menu.FORM, Menu.STUDENT_FORM);
 
-        // Define the locator format then apply to elements
+        // Handle your code here
+
     }
 
-    /**
+    @Test(description = "Element Interaction: Small Frame")
+    public void testSmallFrame() {
+        gotoTestWebsite(Menu.ALERT_FRAME_AND_WINDOWS, Menu.FRAME);
+
+        // Handle your code here
+    }
+
+    @Test(description = "Element Interaction: Alert")
+    public void testAlert() {
+        gotoTestWebsite(Menu.ALERT_FRAME_AND_WINDOWS, Menu.ALERT);
+
+        // Handle your code here
+    }
+
+     /**
      * Go to Test Website
      */
-    private void gotoTestWebsite() {
+    private void gotoTestWebsite(Menu parent, Menu subMenu) {
         String url = "https://testek.vn/lab/auto/web-elements/";
-        webDriver.get(url);
+        mWebDriver.get(url);
 
         String XPATH_MENU_FORMAT = "//div[@test-id='%s']";
 
         // Access: Form > [Student Form]
-        WebElement mnuElementEle = webDriver.findElement(By.xpath(String.format(XPATH_MENU_FORMAT, Menu.FORM.getName())));
+        WebElement mnuElementEle = mWebDriver.findElement(By.xpath(String.format(XPATH_MENU_FORMAT, parent.getName())));
         mnuElementEle.click();
 
-        WebElement mnuEle = webDriver.findElement(By.xpath(String.format(XPATH_MENU_FORMAT, Menu.STUDENT_FORM.getName())));
+        WebElement mnuEle = mWebDriver.findElement(By.xpath(String.format(XPATH_MENU_FORMAT, subMenu.getName())));
         mnuEle.click();
 
         waitForDebug(5000);

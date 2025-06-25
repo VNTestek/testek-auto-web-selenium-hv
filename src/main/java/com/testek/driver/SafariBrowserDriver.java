@@ -6,7 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.safari.SafariOptions;
 
-import static com.testek.consts.FrameConst.ProjectConfig.HEADLESS;
+import static com.testek.consts.FrameConst.ExecuteConfig.HEADLESS_FLAG;
+
 
 public class SafariBrowserDriver extends BrowserDriver {
     @Override
@@ -29,7 +30,7 @@ public class SafariBrowserDriver extends BrowserDriver {
         SafariOptions safariOptions = new SafariOptions();
         safariOptions.setAutomaticInspection(false);
 
-        if (HEADLESS)
+        if (HEADLESS_FLAG)
             throw new HeadlessNotSupportedException(safariOptions.getBrowserName());
         return safariOptions;
     }

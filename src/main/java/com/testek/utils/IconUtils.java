@@ -1,7 +1,7 @@
 package com.testek.utils;
 
 import com.testek.consts.FrameConst.Browser;
-import com.testek.consts.FrameConst.Icon;
+import com.testek.report.ReportConfig.*;
 
 /**
  * Class for getting browser icon and OS icon and display on the report

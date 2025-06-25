@@ -1,19 +1,19 @@
 package com.testek.study.lesson13.pages;
 
-import com.testek.study.lesson13.common.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.logging.Logger;
 
-public class HomePage extends BasePage {
+public class HomePage {
     Logger logger = Logger.getLogger(HomePage.class.getName());
     WebDriver mWebDriver;
     WebDriverWait mWebDriverWait;
     public HomePage(WebDriver mWebDriver) {
-        super(mWebDriver);
         this.mWebDriver = mWebDriver;
         mWebDriverWait = new WebDriverWait(mWebDriver, Duration.ofSeconds(10));
     }
@@ -25,8 +25,8 @@ public class HomePage extends BasePage {
     public ClientPage gotoClientsPage() {
         logger.info("Click Client Element");
         String clientXPath ="//a[@href='https://rise.fairsketch.com/clients']";
-        //WebElement clientEle = mWebDriverWait.until(ExpectedConditions.elementToBeClickable(By.xpath(clientXPath)));
-        clickElement(By.xpath(clientXPath));
+        WebElement clientEle = mWebDriverWait.until(ExpectedConditions.elementToBeClickable(By.xpath(clientXPath)));
+        clientEle.click();
 
         return new ClientPage(mWebDriver);
     }

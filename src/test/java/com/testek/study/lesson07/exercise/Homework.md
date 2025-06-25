@@ -1,13 +1,6 @@
 ### Homework: TƯƠNG TÁC PHẦN TỬ
 
-1. Tương tác với toàn bộ các phần tử trong page sau (sử dụng Action):
-   1. Truy cập: https://testek.vn/lab/auto/web-elements/
-   2. Truy cập Form > StudentForm
-   3. Tìm kiếm toàn bộ các phần tử trong page
-
-   ![homepage.png](../../../../../../resources/data/study/studentForm.png)
-
-2. Thực hành tương tác với small frame
+1. Thực hành tương tác với small frame
    1. Truy cập: https://testek.vn/lab/auto/web-elements/
    2. Truy cập Alert, Frame, Windows > Frame
    3. Thực hành tương tác với small frame

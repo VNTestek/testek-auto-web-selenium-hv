@@ -78,14 +78,14 @@ public class ChromeDriverDemoTest {
 
         // Check if the element is correct
         String placeHolder = txtFullNameEle.getAttribute("placeholder");
-        LogUtils.info("Placeholder 1: {}", placeHolder);
+        log.info("Placeholder 1: {}", placeHolder);
 
 
         txtFullNameEle = mWebDriver.findElement(By.id("name"));
 
         // Check if the element is correct
         placeHolder = txtFullNameEle.getAttribute("placeholder");
-        LogUtils.info("Placeholder 2: {}", placeHolder);
+        log.info("Placeholder 2: {}", placeHolder);
     }
 
     /**

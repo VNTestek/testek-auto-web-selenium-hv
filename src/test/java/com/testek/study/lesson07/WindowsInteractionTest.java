@@ -9,7 +9,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.text.MessageFormat;
 import java.util.Set;
 
 import static java.lang.Thread.sleep;
@@ -63,6 +62,8 @@ public class WindowsInteractionTest {
         // Move to the next page
         mWebDriver.navigate().forward();
         waitForDebug(5000);
+
+        mWebDriver.navigate().refresh();
     }
 
     /**
@@ -160,10 +161,12 @@ public class WindowsInteractionTest {
         gotoTestWebsite(Menu.ALERT_FRAME_AND_WINDOWS, Menu.ALERT);
 
         // Click "Alerts"
-        String alertXPath = "//button[test-id='simpleAlert']";
+        String alertXPath = "//button[@test-id='simpleAlert']";
         WebElement alertWinEle = mWebDriver.findElement(By.xpath(alertXPath));
         alertWinEle.click();
         waitForDebug(3000);
+        Alert alert = mWebDriver.switchTo().alert();
+        alert.accept();
 
         // Open prompt alert
         WebElement alertEle = mWebDriver.findElement(By.id("promptAlert"));
@@ -171,7 +174,7 @@ public class WindowsInteractionTest {
         waitForDebug(3000);
 
         // Switch to Alert
-        Alert alert = mWebDriver.switchTo().alert();
+        alert = mWebDriver.switchTo().alert();
         String alertText = alert.getText();
         log.info("Text : {}", alertText);
         waitForDebug(3000);

@@ -1,7 +1,5 @@
 package com.testek.study.lesson13.pages;
 
-import com.testek.study.lesson13.common.BasePage;
-import com.testek.study.lesson13.common.LogType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,7 +12,7 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-public class LoginPage extends BasePage {
+public class LoginPage {
     Logger logger = Logger.getLogger(LoginPage.class.getName());
     WebDriver mWebDriver;
     WebDriverWait mWebDriverWait;
@@ -23,7 +21,6 @@ public class LoginPage extends BasePage {
      * Constructor for Login
      */
     public LoginPage(WebDriver webDriver) {
-        super(webDriver);
         this.mWebDriver = webDriver;
         mWebDriverWait = new WebDriverWait(mWebDriver, Duration.ofSeconds(10));
     }
@@ -37,7 +34,6 @@ public class LoginPage extends BasePage {
         //String url = "https://rise.fairsketch.com/signin";
         logger.info(MessageFormat.format("Go to the website {0}", url));
         mWebDriver.get(url);
-        addReportInfo(LogType.INFO,MessageFormat.format("Go to the website {0}", url));
     }
 
     /**
@@ -50,23 +46,31 @@ public class LoginPage extends BasePage {
     public HomePage login(String username, String password) {
         String LOGIN_FORM = "//input[@placeholder='%s']";
 
+        //region Input UserName -> Password -> Click Login
         // Wait for login shown
         WebElement loginEle = mWebDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(LOGIN_FORM, "Email"))));
         Assert.assertTrue(Objects.nonNull(loginEle), "Verify that accessing the website");
-        inputTextTo(loginEle, username);
+        loginEle.clear();
+        loginEle.sendKeys(username);
+        logger.info(MessageFormat.format("Input username: {0}", username));
 
         // Input password
         WebElement passwordEle = mWebDriver.findElement(By.xpath(String.format(LOGIN_FORM, "Password")));
-        inputTextTo(passwordEle, password);
+        passwordEle.clear();
+        passwordEle.sendKeys(password);
+        logger.info(MessageFormat.format("Input password: {0}", password));
 
         // Click login button
         WebElement loginButton = mWebDriver.findElement(By.xpath("//button[@type='submit']"));
-        clickElement(loginButton);
+        loginButton.click();
+        logger.info("Click Login Button");
 
         // Wait for user icon shown
         mWebDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@id='user-dropdown']//img")));
 
-        // TODO: Verify the title of the page
+
+        // endregion
+
         return new HomePage(mWebDriver);
     }
 }

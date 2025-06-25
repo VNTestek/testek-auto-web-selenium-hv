@@ -4,14 +4,16 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.testek.consts.FrameConst;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Objects;
 
+@Slf4j
 public class ExtentTestManager {
 
     private static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>();
 
     public static ExtentTest getExtentTest() {
-        //System.out.println("ExtentTestManager class: " + extentTest.get());
         return extentTest.get();
     }
 

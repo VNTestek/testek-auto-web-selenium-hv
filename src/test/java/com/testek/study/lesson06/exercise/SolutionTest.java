@@ -49,7 +49,7 @@ public class SolutionTest {
     public void testInteraction() {
         gotoTestWebsite();
 
-        // Define the locator format then apply to elements
+        // Handle your code here
     }
 
     /**

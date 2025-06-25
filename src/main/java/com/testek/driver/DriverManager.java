@@ -13,14 +13,14 @@ import java.util.Objects;
 @NoArgsConstructor
 public class DriverManager {
 
-    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+    private static ThreadLocal<WebDriver> driverThread = new ThreadLocal<>();
 
     /**
      * Get Selenium Web Driver
      * @return The Selenium Web Driver
      */
     public static WebDriver getDriver() {
-        return driver.get();
+        return driverThread.get();
     }
 
     /**
@@ -28,7 +28,7 @@ public class DriverManager {
      * @param driver: The Selenium Web Driver
      */
     public static void setDriver(WebDriver driver) {
-        DriverManager.driver.set(driver);
+        DriverManager.driverThread.set(driver);
     }
 
     /**
@@ -37,7 +37,7 @@ public class DriverManager {
     public static void quitDriver() {
         if (Objects.nonNull(DriverManager.getDriver())) {
             DriverManager.getDriver().quit();
-            DriverManager.driver.remove();
+            DriverManager.driverThread.remove();
         }
     }
 

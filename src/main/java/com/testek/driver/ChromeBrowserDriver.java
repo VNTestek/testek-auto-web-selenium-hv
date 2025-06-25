@@ -10,7 +10,7 @@ import org.openqa.selenium.logging.LoggingPreferences;
 
 import java.util.logging.Level;
 
-import static com.testek.consts.FrameConst.ProjectConfig.HEADLESS;
+import static com.testek.consts.FrameConst.ExecuteConfig.HEADLESS_FLAG;
 
 public class ChromeBrowserDriver extends BrowserDriver {
     @Override
@@ -26,10 +26,9 @@ public class ChromeBrowserDriver extends BrowserDriver {
         chromeOptions.addArguments("--disable-notifications");
         chromeOptions.addArguments("--disable-gpu");
         chromeOptions.addArguments("--no-sandbox"); // Bypass OS security model, useful for CI
-        chromeOptions.addArguments("--no-sandbox");
         chromeOptions.setAcceptInsecureCerts(true);
 
-        if (HEADLESS) chromeOptions.addArguments("--headless");
+        if (HEADLESS_FLAG) chromeOptions.addArguments("--headless=new");
 
         LoggingPreferences logProfs = new LoggingPreferences();
         logProfs.enable(LogType.PERFORMANCE, Level.ALL);
@@ -37,8 +36,6 @@ public class ChromeBrowserDriver extends BrowserDriver {
         if (isLoadings.length > 0 && isLoadings[0])
             chromeOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);
 
-        /* Using for skip loading image in background
-        chromeOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);*/
         return chromeOptions;
     }
 }

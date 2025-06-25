@@ -26,9 +26,14 @@ public enum Menu {
     MODAL_DIALOG("submenu-modal-dialogs"),
 
     WIDGETS("menu-widgets"),
+    ACCORDION("submenu-accordian"),
     SELECTED_MENU("submenu-select-menu"),
     TOOL_TIPS("submenu-tool-tip"),
     AUTO_COMPLETE("submenu-auto-complete"),
+    MENU("submenu-menu"),
+
+    INTERACTIONS("menu-interactions"),
+    DROPPABLE("submenu-droppable"),
 
     ;
 

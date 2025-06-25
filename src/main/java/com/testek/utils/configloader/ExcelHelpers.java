@@ -2,8 +2,8 @@ package com.testek.utils.configloader;
 
 
 import com.testek.datadriven.DataModel;
-import com.testek.utils.LogUtils;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -27,6 +27,7 @@ import static com.testek.consts.FrameConst.DataConfig.DATA_ID_COL;
 /**
  * ExcelHelpers class provides the ability to read data from Excel file
  */
+@Slf4j
 public class ExcelHelpers {
     private static final DecimalFormat df = new DecimalFormat("0.000");
 
@@ -55,7 +56,7 @@ public class ExcelHelpers {
             sh = actualWB.getSheet(sheetName);
 
             if (sh == null) {
-                LogUtils.error("setExcelFile: Sheet name not found.");
+                log.info("setExcelFile: Sheet name not found.");
                 throw new RuntimeException("Sheet name not found.");
             }
 
@@ -64,7 +65,7 @@ public class ExcelHelpers {
             //adding all the column header names to the map 'columns'
             sh.getRow(0).forEach(cell -> columnMapper.put(cell.getStringCellValue(), cell.getColumnIndex()));
         } catch (Exception e) {
-            LogUtils.error("setExcelFile: failed " + e.getMessage());
+            log.info("setExcelFile: failed {}", e.getMessage());
         }
     }
 
@@ -86,7 +87,7 @@ public class ExcelHelpers {
             sh = actualWB.getSheet(sheetName);
 
             if (sh == null) {
-                LogUtils.error("setExcelFile: Sheet name not found.");
+                log.error("setExcelFile: Sheet name not found.");
                 throw new RuntimeException("Sheet name not found.");
             }
 
@@ -101,7 +102,7 @@ public class ExcelHelpers {
                 }
             }
         } catch (Exception e) {
-            LogUtils.error("getDataArray: failed " + e.getMessage());
+            log.error("getDataArray: failed {}", e.getMessage());
         }
         return data;
     }
@@ -136,7 +137,7 @@ public class ExcelHelpers {
             }
 
         } catch (IOException e) {
-            LogUtils.error("Could not read the Excel sheet: " + e.getMessage());
+            log.error("Could not read the Excel sheet: " + e.getMessage());
         }
         return (tabArray);
     }
@@ -168,7 +169,7 @@ public class ExcelHelpers {
             }
 
         } catch (Exception e) {
-            LogUtils.error("getDataHashTable: failed " + e.getMessage());
+            log.error("getDataHashTable: failed " + e.getMessage());
         }
         return data;
     }
@@ -205,7 +206,7 @@ public class ExcelHelpers {
             }
 
         } catch (Exception e) {
-            LogUtils.error("vinGetMasterData: failed " + e.getMessage());
+            log.error("vinGetMasterData: failed " + e.getMessage());
         }
         return data;
     }
@@ -279,7 +280,7 @@ public class ExcelHelpers {
 
             dataListMap = vinGetDetailDataDrivenFromXLS(actualWB, dataListMap);
         } catch (IOException e) {
-            LogUtils.error("vinGetDataDrivenFromXLS: failed " + e.getMessage());
+            log.error("vinGetDataDrivenFromXLS: failed " + e.getMessage());
         }
         return dataListMap;
     }
@@ -287,19 +288,19 @@ public class ExcelHelpers {
     private void fileValidation(File f, String sheetName) {
         if (!f.exists()) {
             try {
-                LogUtils.info("File Excel path not found.");
+                log.info("File Excel path not found.");
                 throw new InvalidPathException(f.getPath(), "File Excel path not found.");
             } catch (Exception e) {
-                LogUtils.error("File Validation: failed " + e.getMessage());
+                log.error("File Validation: failed " + e.getMessage());
             }
         }
 
         if (Objects.isNull(sheetName) || sheetName.isEmpty()) {
             try {
-                LogUtils.info("The Sheet Name is empty or null.");
+                log.info("The Sheet Name is empty or null.");
                 throw new InvalidPathException(f.getPath(), "The Sheet Name is empty or null.");
             } catch (Exception e) {
-                LogUtils.error("File Validation: failed " + e.getMessage());
+                log.error("File Validation: failed " + e.getMessage());
             }
         }
     }
@@ -318,7 +319,7 @@ public class ExcelHelpers {
                 jsonObject = new JSONObject(dataIds);
                 sheets = jsonObject.keySet();
             } catch (Exception e) {
-                LogUtils.info("Json Parse error " + e.getMessage());
+                log.info("Json Parse error " + e.getMessage());
                 return;
             }
 
@@ -446,7 +447,7 @@ public class ExcelHelpers {
                 currentRow++;
             } while (currentRow <= endRow);
         } catch (Exception e) {
-            LogUtils.error("getDetailDataHashTable: failed " + e.getMessage());
+            log.error("getDetailDataHashTable: failed " + e.getMessage());
         }
         return data;
     }
@@ -462,7 +463,7 @@ public class ExcelHelpers {
             return value;
 
         } catch (Exception e) {
-            LogUtils.error("getTestCaseName: failed " + e.getMessage());
+            log.error("getTestCaseName: failed " + e.getMessage());
             throw (e);
         }
     }
@@ -518,7 +519,7 @@ public class ExcelHelpers {
             fileOut.flush();
             fileOut.close();
         } catch (Exception e) {
-            LogUtils.error("setCellData: failed " + e.getMessage());
+            log.error("setCellData: failed " + e.getMessage());
         }
     }
 
@@ -552,7 +553,7 @@ public class ExcelHelpers {
             fileOut.flush();
             fileOut.close();
         } catch (Exception e) {
-            LogUtils.error("setCellData: failed " + e.getMessage());
+            log.error("setCellData: failed " + e.getMessage());
         }
     }
 
@@ -565,7 +566,7 @@ public class ExcelHelpers {
         try {
             File f = new File(excelPath);
             if (!f.exists()) {
-                LogUtils.info("File Excel path not found.");
+                log.info("File Excel path not found.");
                 throw new RuntimeException("File Excel path not found.");
             }
 
@@ -607,7 +608,7 @@ public class ExcelHelpers {
                 // TODO: 26/11/2023 Verify detail
             }
         } catch (Exception e) {
-            LogUtils.error("verifyReportData: failed " + e.getMessage());
+            log.error("verifyReportData: failed " + e.getMessage());
         }
 
         // Add result
