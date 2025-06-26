@@ -11,6 +11,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -22,6 +23,7 @@ import java.time.Duration;
 import java.util.Objects;
 
 import static com.testek.consts.FrameConst.WaitConfig.WAIT_EXPLICIT;
+import static com.testek.controller.WebUI.waitFor;
 
 
 @Setter
@@ -31,6 +33,7 @@ public class TestBase {
     // The driver for interacting with the webpage
     WebDriver mWebDriver;
     WebDriverWait mWebDriverWait;
+    Actions mAction;
 
     public TestBase() {
         // Constructor
@@ -68,7 +71,7 @@ public class TestBase {
         chromeOptions.addArguments("--remote-allow-origins=*");
         mWebDriver = new ChromeDriver(chromeOptions);
         mWebDriverWait = new WebDriverWait(mWebDriver, Duration.ofSeconds(20));
-
+        mAction = new Actions(mWebDriver);
         mWebDriver.manage().window().maximize();
     }
 
@@ -183,8 +186,14 @@ public class TestBase {
     public void selectDropdownContent(WebElement element, String expRowContent, String name) {
         clickElementViaJs(element, "Select " + name);
         inputText(element, name, expRowContent);
-
+        waitForSpinnerInvisible();
         clickTo(findDropContent(expRowContent), "Select " + name + " Type");
+    }
+
+    public void waitForSpinnerInvisible() {
+        String iconLoadingXpath = "//div[@class='model-loading']";
+        waitFor(1);
+        mWebDriverWait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(iconLoadingXpath)));
     }
 
     public void clickElementViaJs(WebElement element, String title) {
@@ -221,5 +230,15 @@ public class TestBase {
         }
         log.info("Element {} : {}", locator, msg);
         return element;
+    }
+
+    public void clickElementByActions(WebElement element, String title) {
+        mAction.moveToElement(element).click().perform();
+        log.info("Click to element by Actions: {}", title);
+    }
+
+    public void doubleClick(WebElement element, String title) {
+        mAction.moveToElement(element).doubleClick(element).perform();
+        log.info("Double click to element: {}", title);
     }
 }
