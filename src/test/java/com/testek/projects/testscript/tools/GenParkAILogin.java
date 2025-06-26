@@ -9,7 +9,7 @@ import com.testek.consts.FrameConst;
 import com.testek.driver.BrowserFactory;
 import com.testek.driver.DriverManager;
 import com.testek.projects.common.TestBase;
-import com.testek.projects.page.tools.GenParkAIPage;
+import com.testek.projects.pages.tools.GenParkAIPage;
 import com.testek.projects.testscript.tools.mails.DongVanMail;
 import com.testek.projects.testscript.tools.otp.DaiLyOTP;
 import io.restassured.RestAssured;

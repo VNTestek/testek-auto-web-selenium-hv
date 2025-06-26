@@ -2,12 +2,13 @@ package com.testek.datadriven;
 
 
 
-import com.testek.utils.LogUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
+@Slf4j
 public class BaseProvider {
 
     /**
@@ -28,7 +29,7 @@ public class BaseProvider {
                 field.set(result, value);
             }
         } catch (Exception e) {
-            LogUtils.error("mergeObjects: Unable to merge 2 objects " + e.getMessage());
+            log.error("Unable to merge 2 objects {}", e.getMessage());
         }
         return (T) result;
     }
@@ -53,12 +54,11 @@ public class BaseProvider {
                     } else {
                         DataModel model = (DataModel) obj;
                         Object newModel = mergeObjects(data.get(model.getDevName()), model);
-                        LogUtils.info(model);
                         f.set(className, newModel);
                         data.put(model.getDevName(), newModel);
                     }
                 } catch (Exception e) {
-                    LogUtils.info("updateDataModel: Unable to read data from DataDriven - convert XLS to Object " + e.getMessage());
+                    log.error("Unable to read data from DataDriven - convert XLS to Object {}", e.getMessage());
                 }
             });
             if (isFirst) {
@@ -125,12 +125,12 @@ public class BaseProvider {
                             }
                         }
                     } catch (Exception e) {
-                         LogUtils.info("updateModel: Unable to read data from DataDriven - Convert XLS to Object " + e.getMessage());
+                         //log.error("Unable to read data from DataDriven - Convert XLS to Object " + e.getMessage());
                     }
                 });
                 finalResult.add(item);
             } catch (Exception e) {
-                LogUtils.info("updateModel : Unable to read data from DataDriven - Convert XLS to Object " + e.getMessage());
+                //log.info("updateModel : Unable to read data from DataDriven - Convert XLS to Object " + e.getMessage());
             }
         });
 

@@ -1,8 +1,7 @@
 package com.testek.driver;
 
 import com.testek.consts.FrameConst;
-import com.testek.exceptions.TargetNotValidException;
-import com.testek.utils.LogUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.LocalFileDetector;
@@ -11,14 +10,19 @@ import org.openqa.selenium.support.ThreadGuard;
 
 import java.net.URL;
 import java.util.EnumMap;
+import java.util.Objects;
 
-import static com.testek.consts.FrameConst.ProjectConfig.*;
+import static com.testek.consts.FrameConst.ExecuteConfig;
+import static com.testek.consts.FrameConst.ExecuteConfig.EXE_ENV_TARGET;
+import static com.testek.consts.FrameConst.SeleniumConfig;
 
 /**
  * Browser Factory, you can create the driver and get the options.
  */
+@Slf4j
 public class BrowserFactory {
-    final static  EnumMap<FrameConst.Browser, BrowserDriver> browserDriverMap;
+    final static EnumMap<FrameConst.Browser, BrowserDriver> browserDriverMap;
+
     static {
         browserDriverMap = new EnumMap<>(FrameConst.Browser.class);
         browserDriverMap.put(FrameConst.Browser.CHROME, new ChromeBrowserDriver());
@@ -27,7 +31,8 @@ public class BrowserFactory {
         browserDriverMap.put(FrameConst.Browser.SAFARI, new SafariBrowserDriver());
     }
 
-    private BrowserFactory() {}
+    private BrowserFactory() {
+    }
 
     /**
      * Create the Selenium Web Driver with the specific browser depending on the target can be LOCAL or REMOTE
@@ -37,25 +42,27 @@ public class BrowserFactory {
      * @param browser : The browser name
      */
     public static void initWebDriver(String browser, boolean... isLoadings) {
-        WebDriver webdriver;
+        // Use the browser from ExecuteConfig if it is set or passed as a parameter
+        if (Objects.nonNull(ExecuteConfig.EXE_BROWSER)) {
+            browser = ExecuteConfig.EXE_BROWSER;
+        } else ExecuteConfig.EXE_BROWSER = browser;
+
+        WebDriver webdriver = null;
         try {
             FrameConst.Browser browserType = FrameConst.Browser.valueOf(browser.toUpperCase());
-            FrameConst.Target target = FrameConst.Target.valueOf(TARGET.toUpperCase());
 
             /* Init the browser driver */
             BrowserDriver browserDriver = browserDriverMap.get(browserType);
-            switch (target) {
+            switch (EXE_ENV_TARGET) {
                 case LOCAL:
                     webdriver = browserDriver.createDriver(isLoadings);
                     break;
                 case REMOTE:
                     webdriver = initRemoteWebDriver(browserDriver.getOptions(isLoadings));
                     break;
-                default:
-                    throw new TargetNotValidException(target.toString());
             }
         } catch (Exception e) {
-            LogUtils.error("Browser|Target not supported: " + e.getMessage());
+            log.error("Browser|Target not supported: {}", e.getMessage());
             throw new IllegalArgumentException("Browser|Target not supported: " + e.getMessage());
         }
 
@@ -73,13 +80,13 @@ public class BrowserFactory {
     private static RemoteWebDriver initRemoteWebDriver(MutableCapabilities capability) {
         RemoteWebDriver remoteWebDriver = null;
         try {
-            String remoteURL = String.format("http://%s:%s/wd/hub", REMOTE_URL, REMOTE_PORT);
+            String remoteURL = String.format("http://%s:%s/wd/hub", SeleniumConfig.REMOTE_URL, SeleniumConfig.REMOTE_PORT);
 
             remoteWebDriver = new RemoteWebDriver(new URL(remoteURL), capability);
             remoteWebDriver.setFileDetector(new LocalFileDetector());
         } catch (Exception e) {
-            LogUtils.error("Remote URL is invalid or Remote Port is not available");
-            LogUtils.error(String.format("Browser: %s", capability.getBrowserName()), e);
+            log.error("Remote URL is invalid or Remote Port is not available");
+            log.error(String.format("Browser: %s", capability.getBrowserName()), e);
             throw new IllegalArgumentException("Browser|Target is not available: " + e.getMessage());
         }
         return remoteWebDriver;

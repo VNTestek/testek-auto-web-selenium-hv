@@ -1,12 +1,12 @@
 package com.testek.projects.common;
 
-import com.testek.consts.FrameConst;
-import com.testek.database.DatabaseInfo;
-import com.testek.database.DatabaseType;
-import com.testek.utils.LogUtils;
+import com.testek.database.config.DatabaseInfo;
+import com.testek.database.config.DatabaseType;
+import com.testek.report.ReportConfig;
 import com.testek.utils.configloader.AbsPropertyUtils;
 import com.testek.utils.configloader.ResourceReader;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,12 +15,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
+import static com.testek.consts.FrameConst.*;
 import static java.util.Locale.ENGLISH;
 import static java.util.Locale.JAPANESE;
 
 /**
  * Properties which loading from project configuration
  */
+@Slf4j
 public class PropertiesUtils extends AbsPropertyUtils {
     private static ResourceBundle resourceConfig;
 
@@ -61,7 +63,7 @@ public class PropertiesUtils extends AbsPropertyUtils {
             if (resourceConfig == null) getInstance(properties.getProperty("language"));
             return resourceConfig.getString(key);
         } catch (Exception e) {
-            LogUtils.error("VException: getLanguageValue: " + e.getMessage());
+            log.error("VException: getLanguageValue: {}", e.getMessage());
             return null;
         }
     }
@@ -86,67 +88,94 @@ public class PropertiesUtils extends AbsPropertyUtils {
      * Update env and property
      */
     public void updateMavenProperties(Properties property, JSONObject configObjects) {
-        /*
-        1. Check lai su dung chung System Env
-        2. Neu da co trong system thi bo qua luon k can update
-        3. Neu chua co trong sytem thi se thuc hien update vao system
-         */
-
         // Read properties from Maven
         Properties properties = System.getProperties();
-        String browser = properties.getProperty("browser", null);
-        String target = properties.getProperty("target", null);
-        String headless = properties.getProperty("headless", null);
-        String remoteIP = properties.getProperty("remote_url", null);
-        String remotePort = properties.getProperty("remote_port", null);
-        String language = properties.getProperty("language", null);
-        String appVersion = properties.getProperty("app_version", null);
-        String appEnvironment = properties.getProperty("app_environment", null);
-        String databaseConnect = properties.getProperty("database_connect", "false");
-        String collectRes = properties.getProperty("collectRes", "false");
+        String exeTarget = properties.getProperty("exeTarget", property.getProperty("exeTarget", "LOCAL"));
+        String appLanguage = properties.getProperty("exeLanguage", property.getProperty("exeLanguage", "vi"));
+        String appVersion = properties.getProperty("appVersion", property.getProperty("appVersion", "1.0"));
+        String exeEnv = properties.getProperty("exeEnv", property.getProperty("exeEnv", "sit"));
+        String exeCategory = properties.getProperty("exeCategory", property.getProperty("exeCategory", "ALL"));
+        String exeJiraId = properties.getProperty("exeJiraId", property.getProperty("exeJiraId", ""));
+        String exeDBVerification = properties.getProperty("exeDBVerification", property.getProperty("exeDBVerification", "false"));
 
-        updateProperty(property, "browser", browser);
-        updateProperty(property, "target", target);
-        updateProperty(property, "headless", headless);
-        updateProperty(property, "remote_url", remoteIP);
-        updateProperty(property, "remote_port", remotePort);
-        updateProperty(property, "language", language);
-        updateProperty(property, "app_version", appVersion);
-        updateProperty(property, "app_environment", appEnvironment);
-        updateProperty(property, "database_connect", databaseConnect);
-        updateProperty(property, "collectRes", collectRes);
+        // Update the property file with the values from the system properties or default values
+        updateProperty(property, "exeTarget", exeTarget);
+        updateProperty(property, "exeLanguage", appLanguage);
+        updateProperty(property, "appVersion", appVersion);
+        updateProperty(property, "exeEnv", exeEnv);
+        updateProperty(property, "exeCategory", exeCategory);
+        updateProperty(property, "exeJiraId", exeJiraId);
+        updateProperty(property, "exeDBVerification", exeDBVerification);
 
-        String exeEnv = property.getProperty("app_environment", "SIT");
+        ExecuteConfig.EXE_ENV = exeEnv.toUpperCase();
+        AppConfig.APP_LANGUAGE = appLanguage.toUpperCase();
+        AppConfig.APP_VERSION = appVersion;
+
+        String exeBrowser = properties.getProperty("exeBrowser", property.getProperty("exeBrowser", "chrome"));
+        String exeHeadlessMode = properties.getProperty("exeHeadlessMode", property.getProperty("exeHeadlessMode", "false"));
+        updateProperty(property, "exeBrowser", exeBrowser);
+        updateProperty(property, "exeHeadlessMode", exeHeadlessMode);
+
         // Application configuration
         JSONObject configJSON = configObjects.getJSONObject("config");
         JSONObject appJSON = configJSON.getJSONObject("env");
-        // Database Config
-        JSONObject envConfig = (JSONObject) appJSON.get(exeEnv.toLowerCase());
+        JSONObject envConfig = (JSONObject) appJSON.get(ExecuteConfig.EXE_ENV.toLowerCase());
 
-
-        updateProperty(property, "base_url", envConfig.getString("baseUrl"));
+        updateProperty(property, "baseUrl", envConfig.getString("baseUrl"));
         updateProperty(property, "account", envConfig.getString("account"));
         updateProperty(property, "password", envConfig.getString("password"));
-        updateProperty(property, "api_url", envConfig.getString("apiUrl"));
+        updateProperty(property, "apiUrl", envConfig.getString("apiUrl"));
+
+        // Common report
+        PROJECT_NAME = property.getProperty("projectName", "TESTEK");
+        JIRA_DOMAIN = property.getProperty("jiraDomain", "https://testek.atlassian.net/browse/");
+        DATABASE_CONNECT_CONFIG = Boolean.parseBoolean(property.getProperty("exeDBVerification", "false"));
+
+        AppConfig.APP_DOMAIN = envConfig.getString("baseUrl");
+        AppConfig.USER_NAME= envConfig.getString("account");
+        AppConfig.PASSWORD = envConfig.getString("password");
+        AppConfig.API_DOMAIN = envConfig.getString("apiUrl");
+
+        ReportConfig.OVERRIDE_REPORTS = Boolean.parseBoolean(property.getProperty("overrideReports", "false"));
+        ReportConfig.AUTHOR = property.getProperty("author", "Testek");
+        ReportConfig.REPORT_TITLE = property.getProperty("reportTitle", "Testek Automation Report");
+        ReportConfig.SCREENSHOT_PASSED_STEPS = Boolean.parseBoolean(property.getProperty("screenshotPassedSteps", "false"));
+        ReportConfig.SCREENSHOT_FAILED_STEPS = Boolean.parseBoolean(property.getProperty("screenshotFailedSteps", "true"));
+        ReportConfig.SCREENSHOT_SKIPPED_STEPS = Boolean.parseBoolean(property.getProperty("screenshotSkippedSteps", "true"));
+        ReportConfig.SCREEN_SHORT_ALL_STEPS = Boolean.parseBoolean(property.getProperty("screenshotAllSteps", "false"));
+        ReportConfig.DRAW_BORDER_ERR_ELEMENT = Boolean.parseBoolean(property.getProperty("drawBorderErrElement", "false"));
+        ReportConfig.VIDEO_RECORD = Boolean.parseBoolean(property.getProperty("videoRecord", "false"));
+        ReportConfig.SAVE_RESPONSE_TO_DATABASE = Boolean.parseBoolean(property.getProperty("exeCollectRes", "false"));
+        ReportConfig.JIRA_EXECUTION_ID = property.getProperty("exeJiraId", "");
+        ReportConfig.DEVELOP_STATE = Boolean.parseBoolean(property.getProperty("exeDevelopState", "false"));
+        ReportConfig.MERGE_REPORT = Boolean.parseBoolean(property.getProperty("exeMergeReport", "false"));
+
+        WaitConfig.WAIT_EXPLICIT = Long.parseLong(property.getProperty("waitExplicit", "10"));
+        WaitConfig.WAIT_IMPLICIT = Long.parseLong(property.getProperty("waitImplicit", "10"));
+        WaitConfig.WAIT_PAGE_LOADED = Long.parseLong(property.getProperty("waitPageLoaded", "10"));
+        WaitConfig.WAIT_DEFAULT = Long.parseLong(property.getProperty("waitDefault", "10"));
+
+        ExecuteConfig.EXE_BROWSER = exeBrowser.toLowerCase();
+        ExecuteConfig.CATEGORY_TYPE = property.getProperty("exeCategory", "ALL");
+        ExecuteConfig.EXE_ENV_TARGET = ExeTarget.valueOf(property.getProperty("exeTarget", "LOCAL").toUpperCase());
+
+        SeleniumConfig.REMOTE_URL = property.getProperty("exeRemoteURL", "http://localhost:4444/wd/hub");
+        SeleniumConfig.REMOTE_PORT = property.getProperty("exeRemotePort", "4444");
         /* Add more properties here */
 
-
-
-        /* Add properties for Farm */
-
         /* List of database connection */
-        FrameConst.DATABASE_CONNECT_LIST.clear();
-        if (!Boolean.parseBoolean(databaseConnect)) return;
+        DATABASE_CONNECT_LIST.clear();
+        if (!DATABASE_CONNECT_CONFIG) return;
         /* TODO: Need to re-check */
-        JSONArray databaseEnvList = (JSONArray) appJSON.get("database");
+        JSONObject databaseJSON = configObjects.getJSONObject("database");
+        JSONObject dbEnvJSON = databaseJSON.getJSONObject("env");
+        JSONArray databaseEnvList = (JSONArray) dbEnvJSON.get(ExecuteConfig.EXE_ENV.toLowerCase());
+
         databaseEnvList.toList().forEach(d -> {
             HashMap tmpDB = (HashMap) d;
             DatabaseType type = DatabaseType.valueOf(String.valueOf(tmpDB.get("type")).toUpperCase());
-            FrameConst.DATABASE_CONNECT_LIST.add(DatabaseInfo.builder().url(String.valueOf(tmpDB.get("url"))).name(String.valueOf(tmpDB.get("name"))).userName(String.valueOf(tmpDB.get("username"))).password(String.valueOf(tmpDB.get("password"))).configPath(String.valueOf(tmpDB.get("config"))).type(type).build());
+            DATABASE_CONNECT_LIST.add(DatabaseInfo.builder().url(String.valueOf(tmpDB.get("url"))).name(String.valueOf(tmpDB.get("name"))).userName(String.valueOf(tmpDB.get("username"))).password(String.valueOf(tmpDB.get("password"))).configPath(String.valueOf(tmpDB.get("config"))).type(type).build());
         });
-
-        // Collect result
-        //FrameConst.COLLECT_RESPONSE = Boolean.parseBoolean(property.getProperty("collectRes", "false"));
     }
 
 
@@ -178,7 +207,6 @@ public class PropertiesUtils extends AbsPropertyUtils {
         try {
             properties = new Properties();
             for (String f : files) {
-                // Check file is not .properties, skip it
                 if (!f.endsWith(".properties")) continue;
 
                 Properties tempProp = new Properties();
@@ -186,7 +214,7 @@ public class PropertiesUtils extends AbsPropertyUtils {
                 properties.putAll(tempProp);
             }
         } catch (Exception e) {
-            LogUtils.error("VException: loadAllFiles: " + e.getMessage());
+            log.error("VException: loadAllFiles: {}", e.getMessage());
         }
     }
 
@@ -199,9 +227,13 @@ public class PropertiesUtils extends AbsPropertyUtils {
         // Add all property
         JSONObject envConfigJSON = new JSONObject();
 
-        String configPath = "config/environment.json";
+        String configPath = "config/env.json";
         JSONObject configObject = new JSONObject(Objects.requireNonNull(readDataFromFile(configPath)));
         envConfigJSON.put("config", configObject);
+
+        String dbPath = "config/database.json";
+        JSONObject dbObject = new JSONObject(Objects.requireNonNull(readDataFromFile(dbPath)));
+        envConfigJSON.put("database", dbObject);
         return envConfigJSON;
     }
 
@@ -209,12 +241,11 @@ public class PropertiesUtils extends AbsPropertyUtils {
     public void executionInfo(Properties properties) {
         System.out.println("\n\n==================EXECUTION INFO========================");
         System.out.println("\tWEB AUTOMATION - PRODUCT MANAGEMENT SYSTEM");
-//        System.out.printf("\tEnvironment: %s%n", FrameConst.EXE_ENV);
-//        System.out.printf("\tExecution Module: %s%n", FrameConst.EXECUTED_MODULES);
-//        System.out.printf("\tExecution Type: %s%n", FrameConst.CATEGORY_TYPE);
-//        System.out.printf("\tLanguage: %s%n", FrameConst.APP_LANGUAGE);
-//        System.out.printf("\tTesting Version: %s%n", FrameConst.APP_VERSION);
-//        System.out.printf("\tCollect Response: %s%n", FrameConst.COLLECT_RESPONSE);
+        System.out.printf("\tEnvironment: %s%n", ExecuteConfig.EXE_ENV);
+        System.out.printf("\tBrowser: %s%n", ExecuteConfig.EXE_BROWSER);
+        System.out.printf("\tExecution Type: %s%n", ExecuteConfig.CATEGORY_TYPE);
+        System.out.printf("\tLanguage: %s%n", AppConfig.APP_LANGUAGE);
+        System.out.printf("\tTesting Version: %s%n", AppConfig.APP_VERSION);
         System.out.println("========================================================\n\n");
     }
 
@@ -252,10 +283,10 @@ public class PropertiesUtils extends AbsPropertyUtils {
      */
     public static String readDataFromFile(String filePath) {
         try {
-            LogUtils.info("Read configuration data from: " + filePath);
+            log.info("Read configuration data from: {}", filePath);
             return ResourceReader.readDataFromResource(filePath);
         } catch (IOException e) {
-            LogUtils.error("Error: " + e.getMessage());
+            log.error("Error: {}", e.getMessage());
         }
         return null;
     }

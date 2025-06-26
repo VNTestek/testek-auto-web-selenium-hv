@@ -2,7 +2,7 @@ package com.testek.projects.testscript.tools.otp;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.testek.projects.common.api.APIBase;
+import com.testek.clients.api.APIBase;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;

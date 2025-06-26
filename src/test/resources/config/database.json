@@ -1,0 +1,36 @@
+{
+  "driver": {
+    "mysql": {
+      "dialect": "org.hibernate.dialect.MySQL5Dialect",
+      "driverClass": "com.mysql.jdbc.Driver"
+    },
+    "postgres": {
+      "dialect": "org.hibernate.dialect.PostgreSQLDialect",
+      "driverClass": "org.postgresql.Driver"
+    }
+  },
+  "env": {
+    "dev": [],
+    "sit": [
+      {
+        "type": "postgres",
+        "name": "apitesting",
+        "url": "jdbc:postgresql://testek.vn:5432/apitesting",
+        "username": "testing",
+        "password": "TestekTester",
+        "config": "hibernate/hibernate.conf.xml"
+      }
+    ],
+    "uat": [
+      {
+        "type": "postgres",
+        "name": "",
+        "url": "jdbc:postgresql://",
+        "username": "",
+        "password": "",
+        "config": "hibernate/hibernate.conf.xml"
+      }
+    ],
+    "prod": []
+  }
+}

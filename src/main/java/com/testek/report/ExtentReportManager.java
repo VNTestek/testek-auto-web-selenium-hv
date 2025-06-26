@@ -1,7 +1,6 @@
 package com.testek.report;
 
 import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.markuputils.ExtentColor;
@@ -13,17 +12,14 @@ import com.aventstack.extentreports.reporter.configuration.Theme;
 import com.aventstack.extentreports.reporter.configuration.ViewName;
 import com.testek.consts.AuthorType;
 import com.testek.consts.FrameConst;
-import com.testek.consts.FrameConst.CategoryType;
-import com.testek.consts.FrameConst.ReportConst;
 import com.testek.driver.DriverManager;
 import com.testek.utils.IconUtils;
-import com.testek.utils.LogUtils;
-import com.testek.utils.ReportUtils;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import io.restassured.specification.QueryableRequestSpecification;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.SpecificationQuerier;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.openqa.selenium.OutputType;
@@ -34,32 +30,35 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
-import static com.testek.consts.FrameConst.ProjectConfig.*;
-import static com.testek.consts.FrameConst.ReportConst.*;
+import static com.testek.consts.FrameConst.JIRA_DOMAIN;
+import static com.testek.report.ReportConfig.*;
 
+@Slf4j
 public final class ExtentReportManager {
 
     private static ExtentReports extentReports;
     static String currentReportName;
     static String screenshotPath;
+    //static String videoPath;
 
     public static void initReports(String reportName, String appVersion, String appName, String excEnv, boolean isUpdate) {
         if (Objects.isNull(extentReports) || isUpdate) {
             if (Objects.isNull(extentReports))
                 extentReports = new ExtentReports();
 
-            String TESTING_VERSION = APPLICATION_VERSION;
+            String TESTING_VERSION = FrameConst.AppConfig.APP_VERSION;
             if (Objects.nonNull(excEnv) && Objects.nonNull(appName) && Objects.nonNull(appVersion))
                 TESTING_VERSION = String.format("%s_%s_%s", excEnv.toUpperCase(), appName.toUpperCase(), appVersion);
 
             reportName = Objects.nonNull(reportName) && !reportName.isEmpty() ? "_" + reportName : Strings.EMPTY;
 
-            currentReportName = ReportUtils.createExtentReportPath(reportName);
+            currentReportName = createExtentReportPath(reportName);
             ExtentSparkReporter spark = new ExtentSparkReporter(currentReportName);
-            String jsonFilePath = ReportUtils.createJsonExtentObserverPath(reportName);
+            String jsonFilePath = createJsonExtentObserverPath(reportName);
 
             JsonFormatter json = new JsonFormatter(jsonFilePath);
             extentReports.attachReporter(json, spark);
@@ -73,11 +72,16 @@ public final class ExtentReportManager {
             }
         }
 
-        screenshotPath = EXTENT_REPORT_FOLDER_PATH + File.separator + "Screenshot";
+        screenshotPath = EXTENT_REPORT_PATH + File.separator + "Screenshots";
         File file = new File(screenshotPath);
         if (!file.exists()) {
             file.mkdir();
-            LogUtils.info("captureScreenshot: Create folder: " + file);
+            log.info("Create folder for screenshot: {}", file);
+        }
+        File vFile = new File(EXTENT_RECORDING_PATH);
+        if (!vFile.exists()) {
+            vFile.mkdir();
+            log.info("Create folder for video recording: {}", file);
         }
     }
 
@@ -104,26 +108,31 @@ public final class ExtentReportManager {
             updateContent();
         }
         ExtentTestManager.unload();
-        ReportUtils.openReports();
     }
 
+
     public static void createTest(String testCaseName) {
-        ExtentTestManager.setExtentTest(extentReports.createTest(testCaseName, null));
+        if (Objects.nonNull(extentReports))
+            ExtentTestManager.setExtentTest(extentReports.createTest(testCaseName, null));
     }
 
     public static void createTest(String testCaseName, String description, String browser) {
+        EXECUTED_TESTCASE_NAME = testCaseName;
         String testName = IconUtils.getBrowserIcon(browser) + " : " + testCaseName + String.format("<br/> <p style='font-size: 0.75em'>%s</p>", description);
         ExtentTestManager.setExtentTest(extentReports.createTest(testName, null));
     }
 
     public static void unloadTest() {
-        if (Objects.nonNull(ExtentTestManager.getExtentTest()))
+        if (Objects.nonNull(ExtentTestManager.getExtentTest())) {
+            ExtentReportManager.addScreenShot(EXECUTED_TESTCASE_NAME + "_Finished");
             ExtentTestManager.unload();
+        }
     }
 
     public static void removeTest(String testCaseName) {
         unloadTest();
-        extentReports.removeTest(testCaseName);
+        if (Objects.nonNull(extentReports))
+            extentReports.removeTest(testCaseName);
     }
 
     /**
@@ -167,32 +176,20 @@ public final class ExtentReportManager {
 
     }
 
-    // public static void addCategories(String[] categories) {
-    synchronized public static void addTestingType(CategoryType[] categories) {
-        if (categories == null) {
-            ExtentTestManager.getExtentTest().assignCategory("REGRESSION");
-        } else Arrays.stream(categories).forEach(c -> addCategory(c.toString()));
-    }
-
     public static void addTFSLink(String tfsLink) {
         if (Objects.nonNull(tfsLink) && !tfsLink.isEmpty()) {
             String[] tmp = tfsLink.split(",");
             for (String link : tmp)
-                ExtentTestManager.getExtentTest().info(MarkupHelper.createLabel("This TC has been FAILED, see details at <a href=\"" + TFS_LINK + link + "\">TFS Link</a>", ExtentColor.AMBER));
+                ExtentTestManager.getExtentTest().info(MarkupHelper.createLabel("This TC has been FAILED, see details at <a href=\"" + JIRA_DOMAIN + link + "\">TFS Link</a>", ExtentColor.AMBER));
         }
     }
 
-    public static void addNode(String message, String nodeTitle) {
-        if (ExtentTestManager.getExtentTest() != null) {
-            ExtentTest extentTest = ExtentTestManager.getExtentTest().createNode(nodeTitle);
-            extentTest.log(Status.INFO, message);
-        }
-    }
     public static void logResponse(Response response) {
         logResponseInReport(response);
     }
+
     public static void logResponseInReport(Response response) {
-        if (FrameConst.ReportConst.LOG_LEVEL.equalsIgnoreCase("Debug")) {
+        if (FrameConst.LOG_LEVEL.equalsIgnoreCase("Debug")) {
             System.out.println("=== HTTP Code: " + response.statusCode());
             System.out.println("SDebug - Response: \n" + response.asPrettyString());
         }
@@ -202,6 +199,7 @@ public final class ExtentReportManager {
             ExtentTestManager.getExtentTest().log(Status.INFO, MarkupHelper.createCodeBlock(response.asPrettyString()));
         }
     }
+
     public static void logRequest(RequestSpecification requestSpecification, FrameConst.HTTPMethod method) {
         QueryableRequestSpecification query = SpecificationQuerier.query(requestSpecification);
 
@@ -215,14 +213,13 @@ public final class ExtentReportManager {
             stringBuilder.append("Body\n").append(reqBody);
 
         logRequestInReport(stringBuilder.toString());
-        if (FrameConst.ReportConst.LOG_LEVEL.equalsIgnoreCase("Debug")) {
+        if (FrameConst.LOG_LEVEL.equalsIgnoreCase("Debug")) {
             requestSpecification.log().all();
         }
     }
 
     public static void logRequestInReport(String request) {
         if (Objects.nonNull(ExtentTestManager.getExtentTest())) {
-            //ExtentTestManager.getExtentTest().log(Status.INFO, MarkupHelper.createLabel("API REQUEST", ExtentColor.ORANGE));
             ExtentTestManager.getExtentTest().log(Status.INFO, MarkupHelper.createCodeBlock(request));
         }
     }
@@ -294,7 +291,7 @@ public final class ExtentReportManager {
         String newLogo = "./css/Logo_Testek.jpg";
 
         try {
-            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(ReportConst.EXTENT_REPORT_FILE_PATH), StandardCharsets.UTF_8);
+            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(currentReportName), StandardCharsets.UTF_8);
             BufferedReader br = new BufferedReader(inputStreamReader);
             StringBuilder stringBuilder = new StringBuilder();
             String val;
@@ -311,10 +308,32 @@ public final class ExtentReportManager {
             }
             br.close();
 
-            File f = new File(ReportConst.EXTENT_REPORT_FILE_PATH);
+            File f = new File(currentReportName);
             FileUtils.writeStringToFile(f, stringBuilder.toString(), StandardCharsets.UTF_8);
         } catch (Exception e) {
-            LogUtils.error("VException: " + e.getMessage());
+            log.error("VException: {}", e.getMessage());
         }
+    }
+
+    /**
+     * Create the report file path
+     */
+    public static String createExtentReportPath(String reportName) {
+        String name = OVERRIDE_REPORTS ?
+                getCurrentDate() + "_" + EXTENT_REPORT_NAME + reportName + ".html"
+                : EXTENT_REPORT_NAME + reportName + ".html";
+        return EXTENT_REPORT_PATH + "/" + name;
+    }
+
+    public static String createJsonExtentObserverPath(String reportName) {
+        String name = OVERRIDE_REPORTS ?
+                getCurrentDate() + "_" + EXTENT_REPORT_NAME + reportName + ".json"
+                : EXTENT_REPORT_NAME + reportName + ".json";
+        return EXTENT_REPORT_PATH + "/" + name;
+    }
+
+    private static String getCurrentDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        return dateFormat.format(new Date());
     }
 }

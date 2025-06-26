@@ -1,9 +1,9 @@
 package com.testek.report;
 
 import com.testek.consts.FrameConst;
-import com.testek.utils.LogUtils;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.testng.*;
 import org.testng.collections.Lists;
 import org.testng.internal.Utils;
@@ -19,9 +19,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static com.testek.consts.FrameConst.ProjectConfig.PROJECT_NAME;
+import static com.testek.consts.FrameConst.PROJECT_NAME;
 import static org.testng.ITestResult.*;
 
+@Slf4j
 public class EmailReporter implements IReporter {
     protected PrintWriter writerReport;
     protected PrintWriter writerSuite, writerResult;
@@ -31,14 +32,11 @@ public class EmailReporter implements IReporter {
     @Override
     public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
         try {
-            String reportFileName = "emailable_report2.html";
-            writerReport = createWriter(reportFileName);
-            String suiteFileName = "test-failed.xml";
-            writerSuite = createWriter(suiteFileName);
-            String resultFileName = "test-result.txt";
-            writerResult = createWriter(resultFileName);
+            writerReport = createWriter("available_report2.html");
+            writerSuite = createWriter("test-failed.xml");
+            writerResult = createWriter("test-result.txt");
         } catch (IOException e) {
-            LogUtils.error("Unable to create output file", e);
+            log.error("Unable to create output file: {} ", e.getMessage());
             return;
         }
         for (ISuite suite : suites) {
@@ -56,9 +54,9 @@ public class EmailReporter implements IReporter {
     }
 
     protected PrintWriter createWriter(String fileName) throws IOException {
-        File file = new File("ExtentReports");
+        File file = new File(ReportConfig.EXTENT_REPORT_PATH);
         if (!file.exists()) file.mkdirs();
-        OutputStream os = Files.newOutputStream(Paths.get("ExtentReports" + File.separator + fileName));
+        OutputStream os = Files.newOutputStream(Paths.get(ReportConfig.EXTENT_REPORT_PATH + File.separator + fileName));
         return new PrintWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8));
     }
 
@@ -66,7 +64,7 @@ public class EmailReporter implements IReporter {
         String s = "<p>Gửi các thành viên dự án, <br><br>Automation Team gửi báo cáo kết quả thực thi dự án " + PROJECT_NAME + ", phiên bản <b> version_build</b><br></p>" +
                 "<p></p> <p>Build result: <b>build_result</b><br></p>" +
                 "<p> Report Links: <br></p> <p>&emsp;<a href=\"ExtentReportLink\">- Extent Report Link </a>" +
-                "<br></p> <p>&emsp;<a href=\"AlureReportLink\">- Allure Report Link </a> </p>" +
+                "<br></p> <p>&emsp;<a href=\"AllureReportLink\">- Allure Report Link </a> </p>" +
                 "<p><i>(Đây là mail phát hành tự động sau khi thực thi. Vui lòng liên hệ Automation Team nếu bạn cần thêm thông tin!)</i>.</p>";
         writerReport.println(s);
         writerReport.println("<p>=================================================</p><br><h4>Report Detail:</h4>");
@@ -80,7 +78,7 @@ public class EmailReporter implements IReporter {
     protected void writeHead() {
         writerReport.println("<head>");
         writerReport.println("<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"/>");
-        writerReport.println(String.format("<title>%s</title>", FrameConst.ReportConst.REPORT_TITLE));
+        writerReport.println(String.format("<title>%s</title>", ReportConfig.REPORT_TITLE));
         writeStylesheet();
         writerReport.println("</head>");
     }

@@ -6,12 +6,6 @@ package com.testek.consts;
  * @author vincent
  */
 public enum AuthorType {
-
-    //region Automation Engineer
     ADMIN,
-    // endregion
-
-    // region Reviewer
     Vincent,
-    // endregion
 }

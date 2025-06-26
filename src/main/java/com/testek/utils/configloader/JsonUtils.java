@@ -1,8 +1,8 @@
 package com.testek.utils.configloader;
 
 import com.testek.datadriven.DataModel;
-import com.testek.utils.LogUtils;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
@@ -15,6 +15,7 @@ import java.util.*;
  * Read Json Data
  */
 
+@Slf4j
 public class JsonUtils {
     @Getter
     private static final JsonUtils instance = new JsonUtils();
@@ -34,7 +35,7 @@ public class JsonUtils {
                 return FileUtils.readFileToString(file, StandardCharsets.UTF_8);
             }
         } catch (IOException e) {
-            LogUtils.error(String.format("Exception occurred - Reading json file:%s\n%s ", filePath, e.getMessage()));
+            log.error(String.format("Exception occurred - Reading json file:%s\n%s ", filePath, e.getMessage()));
             throw new RuntimeException(e);
         }
         return "";
@@ -47,10 +48,10 @@ public class JsonUtils {
      */
     public static String readFileDataFromResource(String filePath) {
         try {
-            LogUtils.info("Read configuration data from: " + filePath);
+            log.info("Read configuration data from: {}", filePath);
             return ResourceReader.readDataFromResource(filePath);
         } catch (IOException e) {
-            LogUtils.error("Error: " + e.getMessage());
+            log.error("Error: {}", e.getMessage());
         }
         return null;
     }
@@ -74,7 +75,7 @@ public class JsonUtils {
                 dataListMap.add(rowDataMap);
             });
         } catch (Exception e) {
-            LogUtils.error("VException: " + e.getMessage());
+            log.error("VException: " + e.getMessage());
         }
         return dataListMap;
     }
@@ -132,7 +133,7 @@ public class JsonUtils {
                 dataListMap.add(rowDataMap);
             });
         } catch (Exception e) {
-            LogUtils.error("VException: " + e.getMessage());
+            log.error("VException: " + e.getMessage());
         }
         return dataListMap;
     }

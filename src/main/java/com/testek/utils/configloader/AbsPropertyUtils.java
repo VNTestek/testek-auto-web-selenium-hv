@@ -1,20 +1,22 @@
 package com.testek.utils.configloader;
 
 
+import com.testek.consts.FrameConst;
 import com.testek.utils.LanguageUtils;
-import com.testek.utils.LogUtils;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 
 import java.util.*;
 
-import static com.testek.consts.FrameConst.DataConfig.LANG_EN;
-import static com.testek.consts.FrameConst.DataConfig.LANG_VI;
+import static com.testek.consts.FrameConst.LANG_EN;
+import static com.testek.consts.FrameConst.LANG_VI;
 import static java.util.Locale.ENGLISH;
 
 @Getter
 @Setter
+@Slf4j
 public abstract class AbsPropertyUtils {
     private static ResourceBundle LANGUAGE_RESOURCE;
     public static Properties properties;
@@ -41,7 +43,7 @@ public abstract class AbsPropertyUtils {
      */
     public static String getLanguageValue(String key) {
         try {
-            if (LANGUAGE_RESOURCE == null) loadLanguageBundle(APILanguageProperty.getLANGUAGE());
+            if (LANGUAGE_RESOURCE == null) loadLanguageBundle(FrameConst.AppConfig.APP_LANGUAGE);
             return LANGUAGE_RESOURCE.getString(key);
         } catch (Exception e) {
             return "LANGUAGE_NOT_FOUND";
@@ -55,7 +57,7 @@ public abstract class AbsPropertyUtils {
             keyValue = properties.getProperty(key);
             return LanguageUtils.convertCharset_ISO_8859_1_To_UTF8(keyValue);
         } catch (Exception e) {
-            LogUtils.error(e.getMessage());
+            log.error(e.getMessage());
         }
         return keyValue;
     }
@@ -65,7 +67,7 @@ public abstract class AbsPropertyUtils {
         try {
             return Boolean.parseBoolean(value);
         } catch (Exception e) {
-            LogUtils.error("VException: getBoolValue: " + e.getMessage());
+            log.error("VException: getBoolValue: {}", e.getMessage());
         }
         return false;
     }

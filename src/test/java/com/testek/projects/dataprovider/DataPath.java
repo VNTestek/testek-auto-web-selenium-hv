@@ -1,9 +1,11 @@
 package com.testek.projects.dataprovider;
 
-import static com.testek.consts.FrameConst.ProjectConfig.APPLICATION_ENV;
+import com.testek.consts.FrameConst;
 
 public interface DataPath {
-    String DATA_LOGIN_DEMO = "data/" + APPLICATION_ENV+ "/json/loginData.json";
-    String DATA_LOGIN = "data/" + APPLICATION_ENV+ "/json/loginDataFull.json";
-    String DATA_CREATE_PRODUCT = "data/" + APPLICATION_ENV+ "/json/createProduct.json";
+    String env = FrameConst.ExecuteConfig.EXE_ENV.toLowerCase();
+
+    String DATA_LOGIN_DEMO = "data/" + env + "/json/loginData.json";
+    String DATA_LOGIN = "data/" + env + "/json/loginDataFull.json";
+    String DATA_CREATE_PRODUCT = "data/" + env + "/json/createProduct.json";
 }

@@ -1,0 +1,1 @@
+package com.testek.projects.client.rest;import lombok.Getter;@Getterpublic class APIPath {    public static String LOGIN_API = "/login-with-local";}
