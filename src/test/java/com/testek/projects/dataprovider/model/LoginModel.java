@@ -18,5 +18,4 @@ public class LoginModel extends BaseModel {
         userName = createDataModelObj("UserName");
         password = createDataModelObj("Password");
     }
-
 }
