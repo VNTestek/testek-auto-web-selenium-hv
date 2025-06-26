@@ -1,25 +1,21 @@
-package lesson17.steps;
+package com.testek.study.lesson22.steps;
 
+import com.testek.study.lesson22.common.DriverManager;
+import com.testek.study.lesson22.steps.pages.LoginPage;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import io.github.bonigarcia.wdm.config.DriverManagerType;
-import com.testek.study.lesson122.common.DriverManager;
-import lesson17.steps.pages.LoginPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-public class StepDefinitations {
-    private WebDriver mWebDriver;
+public class StepDefinitions {
     private LoginPage loginPage;
     private String baseURL = "https://rise.fairsketch.com";
 
     @Given("Truy cập website")
     public void truy_cập_website() {
-        WebDriverManager.getInstance(DriverManagerType.CHROME).setup();
-        mWebDriver = new ChromeDriver(configChromeOption());
+        WebDriver mWebDriver = new ChromeDriver(configChromeOption());
         DriverManager.setWebDriver(mWebDriver);
 
         loginPage = new LoginPage(mWebDriver);

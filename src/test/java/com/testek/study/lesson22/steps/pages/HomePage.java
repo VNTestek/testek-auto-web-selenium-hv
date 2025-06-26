@@ -1,4 +1,4 @@
-package lesson17.steps.pages;
+package com.testek.study.lesson22.steps.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

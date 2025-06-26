@@ -1,4 +1,4 @@
-package lesson17.common;
+package com.testek.study.lesson22.common;
 
 import org.openqa.selenium.WebDriver;
 

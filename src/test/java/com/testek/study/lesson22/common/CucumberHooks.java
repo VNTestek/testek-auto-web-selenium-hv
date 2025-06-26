@@ -1,8 +1,7 @@
-package lesson17.common;
+package com.testek.study.lesson22.common;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import com.testek.study.lesson122.common.DriverManager;
 
 public class CucumberHooks {
     @Before
