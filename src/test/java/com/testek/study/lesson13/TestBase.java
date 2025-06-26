@@ -1,4 +1,4 @@
-package com.testek.study.lesson13.exercise;
+package com.testek.study.lesson13;
 
 
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.testek.study.lesson13.exercise;
+package com.testek.study.lesson13;
 
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -43,7 +43,7 @@ public class CreateProductTest extends TestBase {
         WebElement formItemSupplierEle = waitForElementVisible(By.id("form_item_supplier"));
         selectDropdownContent(formItemSupplierEle, "LG VietNam", "Supplier");
 
-        inputText(waitForElementVisible(By.id("form_item_code")), "Product Code", "P001");
+        inputText(waitForElementVisible(By.id("form_item_code")), "Product Code", "AUTO_VINCENT_PRODUCT_"+ System.currentTimeMillis());
         inputText(waitForElementVisible(By.id("form_item_name")), "Product Name", "Test Product");
         inputText(waitForElementVisible(By.id("form_item_unit")), "Product Unit", "Cái");
         inputText(waitForElementVisible(By.id("form_item_description")), "Product Description", "This is a test product");

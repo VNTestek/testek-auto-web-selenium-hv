@@ -1,7 +1,0 @@
-Testcase	Description	Class	Result
-Regression Tests
-Common
-TK_CreateProduct_001_Valid	[0] Verify creating a new product	CreateProductTest	PASSED
-TK_CreateProduct_001_Valid	[1] Verify creating a new product	CreateProductTest	FAILED
-Testek_Login_001_Valid	[0] Verify the login function	LoginTest	PASSED
-Testek_Login_001_Valid	[1] Verify the login function	LoginTest	PASSED
