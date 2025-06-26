@@ -1,20 +1,14 @@
 package com.testek.study.lesson13.exercise;
 
-import static com.testek.controller.WebUI.pressENTER;
-import static com.testek.controller.WebUI.pressKeyEvent;
-import static com.testek.controller.WebUI.switchToWindowByHandle;
-import static com.testek.controller.WebUI.waitFor;
-
-import java.awt.event.KeyEvent;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.testng.Assert;
 import org.testng.annotations.Test;
+import java.util.ArrayList;
+import java.util.List;
 
+@Slf4j
 public class CreateOrderTest extends TestBase {
     private static final String YOUR_NAME = "CreateOrderTest";
 
@@ -44,7 +38,7 @@ public class CreateOrderTest extends TestBase {
         // Verify Order page
         WebElement btnCreateProductEle = waitForElementVisible(By.xpath("//button[@testek='btn-add']"));
         assertTrueCondition(btnCreateProductEle.isDisplayed(), "Verify Product page");
-        assertEqualCondition(btnCreateProductEle.getText(),"Thêm đơn hàng", "Verify Create Order button text");
+        assertEqualCondition(btnCreateProductEle.getText(), "Thêm đơn hàng", "Verify Create Order button text");
 
         // Click Create Order button
         clickElementViaJs(btnCreateProductEle, "Create Order Button");
@@ -53,7 +47,7 @@ public class CreateOrderTest extends TestBase {
         WebElement formItemCustomerIdEle = waitForElementVisible(By.id("form_item_customerId"));
         selectDropdownContent(formItemCustomerIdEle, "LINH CHI", "Khách hàng");
 
-        String shipperPhoneNumberFirst = "01"+System.currentTimeMillis();
+        String shipperPhoneNumberFirst = "01" + System.currentTimeMillis();
         inputText(waitForElementVisible(By.id("form_item_phoneNum")), "Phone Number", shipperPhoneNumberFirst);
         inputText(waitForElementVisible(By.id("form_item_shippingPhoneNum")), "Shipper Phone Number", "0901234567");
         shipperPhoneNumbers.add(shipperPhoneNumberFirst);
@@ -61,7 +55,7 @@ public class CreateOrderTest extends TestBase {
         inputText(waitForElementVisible(By.id("form_item_shipAddress")), "Ship Address", String.format("Auto_%s_%s", YOUR_NAME, System.currentTimeMillis()));
 
         // click Checkbox for billing address
-        String chkBillAddressXpath ="//input[@class='ant-checkbox-input']";
+        String chkBillAddressXpath = "//input[@class='ant-checkbox-input']";
         WebElement chkBillingAddressEle = mWebDriver.findElement(By.xpath(chkBillAddressXpath));
         clickElementViaJs(chkBillingAddressEle, "Billing Address Checkbox");
 
@@ -80,9 +74,9 @@ public class CreateOrderTest extends TestBase {
 
         // Fill in Order form
         selectDropdownContent(formItemCustomerIdEle, "QUANG ANH", "Khách hàng");
-        String shipperPhoneNumberSecond = "02"+System.currentTimeMillis();
+        String shipperPhoneNumberSecond = "02" + System.currentTimeMillis();
         inputText(waitForElementVisible(By.id("form_item_phoneNum")), "Phone Number", shipperPhoneNumberSecond);
-        inputText(waitForElementVisible(By.id("form_item_shippingPhoneNum")), "Shipper Phone Number","0907654321" );
+        inputText(waitForElementVisible(By.id("form_item_shippingPhoneNum")), "Shipper Phone Number", "0907654321");
         shipperPhoneNumbers.add(shipperPhoneNumberSecond);
         inputText(waitForElementVisible(By.id("form_item_email")), "Email", String.format("%s_%s@gmail.com", YOUR_NAME, System.currentTimeMillis()));
         selectDropdownContent(formItemEmployeeIdEle, "Mai Quỳnh Chi", "Nhân viên");
@@ -96,10 +90,10 @@ public class CreateOrderTest extends TestBase {
 
         // Go to Order page
         clickTo(navOrderEle, "Order Navigation");
-        for (String shipperPhoneNumber:shipperPhoneNumbers){
+        for (String shipperPhoneNumber : shipperPhoneNumbers) {
             // Verify the Order is added to the list
-            String chbSeachXpath = "//div[contains(@class,'search-text')]/child::input[@testek='search-input']";
-            WebElement chbSearchEle = waitForElementVisible(By.xpath(chbSeachXpath));
+            String chbSearchXPath = "//div[contains(@class,'search-text')]/child::input[@testek='search-input']";
+            WebElement chbSearchEle = waitForElementVisible(By.xpath(chbSearchXPath));
             inputText(chbSearchEle, "Search Order", shipperPhoneNumber);
 
             //click on button Search
@@ -113,21 +107,23 @@ public class CreateOrderTest extends TestBase {
             mWebDriverWait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(searchResultXPath)));
 
             // Verify search results
-            List<WebElement> searchResultEles = mWebDriver.findElements(By.xpath(searchResultXPath));
-            System.out.println("Number of search results: " + searchResultEles.size());
+            List<WebElement> searchResultList = mWebDriver.findElements(By.xpath(searchResultXPath));
+            log.info("Number of search results: {}", searchResultList.size());
 
             // Check each row contains the shipper phone number
-            for (int i = 0; i < searchResultEles.size(); i++) {
+            for (int i = 0; i < searchResultList.size(); i++) {
                 // Get the shipper phone number columns
-                System.out.println("[ROUND]= "+i);
-                WebElement searchResultEle = searchResultEles.get(i);
+                log.info("[ROUND]= {}", i);
+                WebElement searchResultEle = searchResultList.get(i);
                 WebElement tdMobileColEle = searchResultEle.findElement(By.xpath(".//td[2]"));
                 String tdMobileColEleText = tdMobileColEle.getText();
 
                 boolean isMatch = tdMobileColEleText.equals(shipperPhoneNumber);
 
-                System.out.println("Row " + (i + 1) + " SDT shipper: " + tdMobileColEleText +" => Match: with"+shipperPhoneNumber+" is " + isMatch);
-                assertTrueCondition(isMatch, "Result return in row " + (i + 1) + "does not equal "+shipperPhoneNumber+" in SDT");
+                log.info("Row {} SDT shipper: {} => Match: with{} is {}", i + 1, tdMobileColEleText, shipperPhoneNumber, isMatch);
+                assertTrueCondition(isMatch, "Result return in row " + (i + 1) + "does not equal " + shipperPhoneNumber + " in SDT");
+
+                // TODO: Verify other information in the row
             }
         }
     }
