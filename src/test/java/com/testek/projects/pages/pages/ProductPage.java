@@ -52,6 +52,33 @@ public class ProductPage extends BasePage {
         return this;
     }
 
+    /**
+     * Fill the product information with random data
+     */
+    public ProductPage fillProductInfo() {
+        /* Update the random Price & Quantity */
+        long currentTimeMillis = System.nanoTime();
+        String category = "Điện thoại";
+        String supplier = "Nikon VietNam";
+        String code = "AUTO_PRODUCT_VINCENT_" + currentTimeMillis;
+        String name = "Samsung Galaxy S25 - " + currentTimeMillis;
+        String description = "Smartphone Samsung Galaxy S25 - 128GB, 8GB RAM, 5G, Camera 108MP, Pin 5000mAh - " + currentTimeMillis;
+        String unit = "Cái";
+        String quantity = "10";
+        String price = "15000000.0";
+
+        productObjects.selectCategory(category)
+                .selectSupplier(supplier)
+                .inputProductCode(code)
+                .inputProductUnit(unit)
+                .inputProductName(name)
+                .inputProductDescription(description)
+                .inputProductPrice(price)
+                .inputProductQuantity(quantity);
+        return this;
+    }
+
+
     /* Verify the product page display */
     public void verifyProductPageDisplay() {
         WebElement element = waitForElementVisible(productObjects.findBtnAddProductPage());

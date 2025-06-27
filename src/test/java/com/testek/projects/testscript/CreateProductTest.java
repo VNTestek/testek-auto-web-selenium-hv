@@ -40,4 +40,18 @@ public class CreateProductTest extends TestBase {
         productPage.verifyProductCreation();        // Verify popup success hien thi
     }
 
+    @FrameAnnotation(category = {FrameConst.CategoryType.REGRESSION}, author = {AuthorType.Vincent}, reviewer = {AuthorType.Vincent})
+    @Test(description = "Verify creating a new product")
+    public void TK_CreateProduct_002_Invalid() {
+        productPage.verifyProductPageDisplay(); // Verify product page hien thi
+
+        productPage.clickToCreateProduct()      // Click button Create Product
+                .fillProductInfo()
+                .clickToCreateProduct();
+
+        // Verify the login successfully
+        productPage.verifyProductCreation();        // Verify popup success hien thi
+    }
+
+
 }
