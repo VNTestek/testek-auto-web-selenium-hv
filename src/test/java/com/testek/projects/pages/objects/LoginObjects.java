@@ -30,6 +30,15 @@ public class LoginObjects extends BaseObjects {
         return findWebElement(loginLocator.getBtnLogin());
     }
 
+    WebElement findForgotPasswordEle() {
+        return findWebElement(loginLocator.getBtnForgotPassword());
+    }
+
+    WebElement findRegisterEle() {
+        return findWebElement(loginLocator.getBtnRegister());
+    }
+
+
     /**
      * Input the username to the login page
      */
@@ -52,5 +61,21 @@ public class LoginObjects extends BaseObjects {
     public HomePage clickLoginButton() {
         clickTo(findLoginButtonEle(), "Login Button");
         return PageManagement.gotoHomePage();
+    }
+
+    /**
+     * Click the forgot password button on the login page
+     */
+    public LoginObjects clickForgotPasswordButton() {
+        clickTo(findForgotPasswordEle(), "Forgot Password Button");
+        return this;
+    }
+
+    /**
+     * Click the register button on the login page
+     */
+    public LoginObjects clickRegisterButton() {
+        clickTo(findRegisterEle(), "Register Button");
+        return this;
     }
 }

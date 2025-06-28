@@ -63,6 +63,14 @@ public class LoginPage extends BasePage {
                 FailureHandling.STOP_ON_FAILURE, "Verify the page title");
     }
 
+    public void forgotPassword() {
+       loginObjects.clickForgotPasswordButton();
+    }
+
+    public void register() {
+        loginObjects.clickRegisterButton();
+    }
+
 
     //endregion
 }
