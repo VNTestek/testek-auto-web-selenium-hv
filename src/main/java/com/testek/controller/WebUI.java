@@ -763,6 +763,22 @@ public class WebUI {
     }
 
     /**
+     * Verify whether the element has value
+     */
+    public static WebElement waitForElementHasAttributeValue(WebElement element) {
+        String locator = Strings.EMPTY;
+        String msg = "has-value";
+        try {
+            locator = getLocatorFromWebElement(element);
+            getWaitDriver().until(ExpectedConditions.attributeToBeNotEmpty(element, "value"));
+        } catch (Exception e) {
+            msg = "hasnot-value";
+        }
+        log.info("Element {} : {}", locator, msg);
+        return element;
+    }
+
+    /**
      * Wait for element clickable
      *
      * @param by: The By object of element

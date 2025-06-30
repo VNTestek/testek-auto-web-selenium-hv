@@ -52,6 +52,16 @@ public class LoginPage extends BasePage {
         return login(data.getUserName().getValue(), data.getPassword().getValue());
     }
 
+    // Click forget password
+    public void clickToForgetPassword(){
+        loginObjects.clickForgetButton();
+    }
+
+    // Click Sign in
+    public void clickToRegister(){
+        loginObjects.clickRegisterButton();
+    }
+
     //endregion
 
     //***************** Verify *****************/

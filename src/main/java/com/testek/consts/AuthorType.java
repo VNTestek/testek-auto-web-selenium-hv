@@ -8,4 +8,5 @@ package com.testek.consts;
 public enum AuthorType {
     ADMIN,
     Vincent,
+    HuongPham,
 }
