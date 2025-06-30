@@ -64,7 +64,7 @@ public class TestBase {
     @AfterTest(alwaysRun = true)
     public void afterTest(ITestContext context) {
         log.info("TestBase: afterTest");
-        ExtentReportManager.flushReports();
+//        ExtentReportManager.flushReports();
 
         // Clear the driver after test execution
         DriverManager.quitDriver();

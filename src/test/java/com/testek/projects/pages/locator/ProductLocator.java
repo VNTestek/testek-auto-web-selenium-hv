@@ -2,6 +2,7 @@ package com.testek.projects.pages.locator;
 
 
 import lombok.Getter;
+import org.openqa.selenium.By;
 
 @Getter
 public class ProductLocator extends BaseLocator {
@@ -26,10 +27,11 @@ public class ProductLocator extends BaseLocator {
     String txtProductIdResult="//input[@placeholder='Mã sản phẩm']";
     String btnAddProduct = "//button[@testek='btn-add']";
     String btnAddMoreProduct = "//button[@testek='btn-add-more']";
+    String iconAdd = "//div[@class='cursor-pointer icon-24 icon-insert']";
+    String mnuProduct = "//span[starts-with(@class,'ant-dropdown')]/div[normalize-space()='Sản phẩm']";
 
     String popUpAddProductResult= "//div[contains(@class,'ant-message-success')]";
 
     /* Product List */
     String lblRowContent = "//td[text()='%s']";
-    String btnAddProductPage = "//button[@testek='btn-add']";
 }

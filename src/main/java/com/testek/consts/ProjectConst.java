@@ -1,5 +1,6 @@
 package com.testek.consts;
 
+import com.github.rzymek.opczip.reader.ordered.OrderedZipStreamReader;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +14,8 @@ public class ProjectConst {
     @Getter
     public enum ModuleURL {
         DASHBOARD("Dashboard", APP_DOMAIN + "/dashboard"),
-        PRODUCT("Product", APP_DOMAIN + "/product");
+        PRODUCT("Product", APP_DOMAIN + "/product"),
+        ORDER("Order", APP_DOMAIN + "/lab/auto/order");
 
         private final String name;
         private final String path;

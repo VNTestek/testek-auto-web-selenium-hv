@@ -1,9 +1,11 @@
 package com.testek.projects.pages.objects;
 
+import com.testek.consts.FrameConst;
 import com.testek.projects.pages.PageManagement;
 import com.testek.projects.pages.locator.LoginLocator;
 import com.testek.projects.pages.pages.HomePage;
 import lombok.Getter;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 @Getter
@@ -30,6 +32,18 @@ public class LoginObjects extends BaseObjects {
         return findWebElement(loginLocator.getBtnLogin());
     }
 
+    WebElement findBtnForgotPassEle() {
+        return findWebElement(loginLocator.getBtnForgotPass());
+    }
+
+    WebElement findBtnRegisterEle() {
+        return findWebElement(loginLocator.getBtnRegister());
+    }
+
+    WebElement findTitleLoginEle() {
+        return findWebElement(loginLocator.getTitleXpath());
+    }
+
     /**
      * Input the username to the login page
      */
@@ -52,5 +66,31 @@ public class LoginObjects extends BaseObjects {
     public HomePage clickLoginButton() {
         clickTo(findLoginButtonEle(), "Login Button");
         return PageManagement.gotoHomePage();
+    }
+
+    /**
+     * Click the forgot password button on the login page
+     */
+    public HomePage clickForgotPassButton() {
+        clickTo(findBtnForgotPassEle(), "Forgot Password Button");
+        return PageManagement.gotoHomePage();
+    }
+
+    /**
+     * Click the register button on the login page
+     */
+    public HomePage clickRegisterButton() {
+        clickTo(findBtnRegisterEle(), "Register Button");
+        return PageManagement.gotoHomePage();
+    }
+
+    //1. Kiểm tra có truy cập đúng website không ?
+    /**
+     * verify Access Successfully
+     */
+    public void verifyAccessSuccess() {
+        WebElement titleLoginEle = findTitleLoginEle();
+        assertTrueCondition(titleLoginEle, titleLoginEle.isDisplayed(), FrameConst.FailureHandling.CONTINUE_ON_FAILURE, "Website not match");
+        verifyElementTextEqual(titleLoginEle, getLanguageValue("ProductManagementSystem"));
     }
 }

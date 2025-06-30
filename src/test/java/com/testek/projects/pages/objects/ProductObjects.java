@@ -58,10 +58,6 @@ public class ProductObjects extends BaseObjects {
         return findWebElement(productLocator.getBtnAddProduct());
     }
 
-    public WebElement findBtnAddProductPage() {
-        return findWebElement(productLocator.getBtnAddProductPage());
-    }
-
     public WebElement findMsgCreateProduct() {
         return findWebElement(productLocator.getPopUpAddProductResult());
     }
@@ -72,6 +68,14 @@ public class ProductObjects extends BaseObjects {
 
     public WebElement findProductResult() {
         return findWebElement(productLocator.getTxtAreaResult());
+    }
+
+    public WebElement findIconAdd() {
+        return findWebElement(productLocator.getIconAdd());
+    }
+
+    public WebElement findMnuProduct() {
+        return findWebElement(productLocator.getMnuProduct());
     }
 
 
@@ -112,6 +116,16 @@ public class ProductObjects extends BaseObjects {
 
     public ProductObjects clickAddProductButton() {
         clickTo(findBtnAddProduct(), "Add Product Button");
+        return this;
+    }
+
+    public ProductObjects clickIconAddProduct() {
+        clickTo(findIconAdd(), "Icon Add");
+        return this;
+    }
+
+    public ProductObjects clickMenuProduct() {
+        clickTo(findMnuProduct(), "Menu Product");
         return this;
     }
 
