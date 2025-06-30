@@ -3,14 +3,19 @@ package com.testek.projects.testscript;
 import com.testek.annotations.FrameAnnotation;
 import com.testek.consts.AuthorType;
 import com.testek.consts.FrameConst;
+import com.testek.driver.BrowserFactory;
+import com.testek.driver.DriverManager;
 import com.testek.projects.common.TestBase;
 import com.testek.projects.dataprovider.model.CreateProductModel;
 import com.testek.projects.dataprovider.providers.CreateProductProvider;
 import com.testek.projects.pages.pages.HomePage;
 import com.testek.projects.pages.pages.ProductPage;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import static com.testek.consts.FrameConst.ExecuteConfig.EXE_BROWSER;
 
 public class CreateProductTest extends TestBase {
     ProductPage productPage;
@@ -29,7 +34,7 @@ public class CreateProductTest extends TestBase {
 
     @FrameAnnotation(category = {FrameConst.CategoryType.REGRESSION}, author = {AuthorType.Vincent}, reviewer = {AuthorType.Vincent})
     @Test(description = "Verify creating a new product", dataProvider = "TK_CreateProduct_001_Valid", dataProviderClass = CreateProductProvider.class)
-    public void TK_CreateProduct_001_Valid(CreateProductModel createProductModel) {
+    public void TK_CreateProduct_001_InValid(CreateProductModel createProductModel) {
         productPage.verifyProductPageDisplay(); // Verify product page hien thi
 
         productPage.clickToCreateProduct()      // Click button Create Product
@@ -40,9 +45,13 @@ public class CreateProductTest extends TestBase {
         productPage.verifyProductCreation();        // Verify popup success hien thi
     }
 
+    //KIM CHI LAM BTVN [OPTIONAL]
     @FrameAnnotation(category = {FrameConst.CategoryType.REGRESSION}, author = {AuthorType.Vincent}, reviewer = {AuthorType.Vincent})
     @Test(description = "Verify creating a new product")
-    public void TK_CreateProduct_002_Invalid() {
+    public void TK_CreateProduct_002_Valid() {
+        productPage.clickIconAdd();
+        productPage.clickMnuProduct();
+
         productPage.verifyProductPageDisplay(); // Verify product page hien thi
 
         productPage.clickToCreateProduct()      // Click button Create Product
