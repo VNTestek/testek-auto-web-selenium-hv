@@ -25,10 +25,20 @@ public class OrderLocator extends BaseLocator {
     String btnAdd = "//button[@testek='btn-add']";
     String btnAddMore = "//button[@testek='btn-add-more']";
     String popUpAddOrderSuccess = "//span[normalize-space()='Thêm đơn hàng thành công']";
-//    String popUpAddProductResult= "//div[contains(@class,'ant-message-success')]";
     String iconAdd = "//div[@class='cursor-pointer icon-24 icon-insert']";
-    String mnuProduct = "//span[starts-with(@class,'ant-dropdown')]/div[normalize-space()='Đơn hàng']";
+    String optionOrder = "//span[starts-with(@class,'ant-dropdown')]/div[normalize-space()='Đơn hàng']";
+
+    String mnuOrder = "//div[@class='icon-24 icon-order-active mr-6']";
+    String keywordXpath = "//input[@class='ant-input css-16pw25h h-8']";
+    String btnSearchXpath = "//button[@testek='btn-search']";
 
     /* Order List */
     String lblRowContent = "//td[text()='%s']";
+
+    /* Order Search Result */
+    String searchResultAddress = "//tr[starts-with(@class,'ant-table-row')]/td[1]";
+    String searchResultPhoneNum = "//tr[starts-with(@class,'ant-table-row')]/td[2]";
+    String searchResultAddressOrder = "//tr[starts-with(@class,'ant-table-row')]/td[3]";
+    String searchResultQuantity = "//tr[starts-with(@class,'ant-table-row')]/td[4]";
+    String searchResultTotal = "//tr[starts-with(@class,'ant-table-row')]/td[5]";
 }

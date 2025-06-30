@@ -9,6 +9,9 @@ import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
+
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -33,8 +36,18 @@ public class OrderPage extends BasePage {
         return this;
     }
 
-    public OrderPage clickMnuOrder() {
-        orderObjects.clickMenuOrder();
+    public OrderPage clickOptOrder() {
+        orderObjects.clickOptionOrder();
+        return this;
+    }
+
+    public OrderPage clickMenuOrder() {
+        orderObjects.clickMnuOrder();
+        return this;
+    }
+
+    public OrderPage clickSearch() {
+        orderObjects.clickBtnSearch();
         return this;
     }
 
@@ -83,11 +96,24 @@ public class OrderPage extends BasePage {
         return this;
     }
 
+    public OrderPage inputKey() {
+        orderObjects.inputKeyword(phoneNumber);
+        return this;
+    }
+
 
     /* Verify the order page display */
     public void verifyOrderPageDisplay() {
         WebElement element = waitForElementVisible(orderObjects.findBtnAddMore());
         assertTrueCondition(element, Objects.nonNull(element), FailureHandling.CONTINUE_ON_FAILURE, "Verify the Order page is displayed");
+    }
+
+    public void clear() {
+        orderObjects.clearShippingPhone();
+        orderObjects.clearPhoneNum();
+        orderObjects.clearEmail();
+        orderObjects.clearAddress();
+        orderObjects.clearAddressOrder();
     }
 
     /**
@@ -130,5 +156,9 @@ public class OrderPage extends BasePage {
 
         assertFalseCondition(orderResultEle, customer.get("address").equals(address),
                 FailureHandling.CONTINUE_ON_FAILURE, "Verify the order address matches the input value" );
+    }
+
+    public void verifySearchResult() {
+
     }
 }

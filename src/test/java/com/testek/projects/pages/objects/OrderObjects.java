@@ -50,6 +50,14 @@ public class OrderObjects extends BaseObjects {
         return findWebElement(orderLocator.getEdtAddressOrder());
     }
 
+    public WebElement findMnuOrder() {
+        return findWebElement(orderLocator.getMnuOrder());
+    }
+
+    public WebElement findBtnSearch() {
+        return findWebElement(orderLocator.getBtnSearchXpath());
+    }
+
     public WebElement findBtnAdd() {
         return findWebElement(orderLocator.getBtnAdd());
     }
@@ -70,8 +78,12 @@ public class OrderObjects extends BaseObjects {
         return findWebElement(orderLocator.getIconAdd());
     }
 
-    public WebElement findMnuOrder() {
-        return findWebElement(orderLocator.getMnuProduct());
+    public WebElement findOptionOrder() {
+        return findWebElement(orderLocator.getOptionOrder());
+    }
+
+    public WebElement findKeyword() {
+        return findWebElement(orderLocator.getKeywordXpath());
     }
 
     public OrderObjects clickIconAddOrder() {
@@ -79,11 +91,25 @@ public class OrderObjects extends BaseObjects {
         return this;
     }
 
-    public OrderObjects clickMenuOrder() {
+    public OrderObjects clickOptionOrder() {
+        clickTo(findOptionOrder(), "Option Product");
+        return this;
+    }
+
+    public OrderObjects clickMnuOrder() {
         clickTo(findMnuOrder(), "Menu Product");
         return this;
     }
 
+    public OrderObjects clickBtnSearch() {
+        clickTo(findBtnSearch(), "Button Search");
+        return this;
+    }
+
+    public OrderObjects inputKeyword(String keyword) {
+        this.inputText(findKeyword(), "Keyword", keyword);
+        return this;
+    }
 
     public OrderObjects inputShippingPhone(String shippingPhone) {
         this.inputText(findShippingPhone(), "Shipping Phone", shippingPhone);
@@ -119,6 +145,32 @@ public class OrderObjects extends BaseObjects {
         clickTo(findBtnAdd(), "Add Order Button");
         return this;
     }
+
+    public OrderObjects clearShippingPhone() {
+        clearText(findShippingPhone());
+        return this;
+    }
+
+    public OrderObjects clearPhoneNum() {
+        clearText(findPhoneNum());
+        return this;
+    }
+
+    public OrderObjects clearEmail() {
+        clearText(findEmail());
+        return this;
+    }
+
+    public OrderObjects clearAddress() {
+        clearText(findAddress());
+        return this;
+    }
+
+    public OrderObjects clearAddressOrder() {
+        clearText(findAddressOrder());
+        return this;
+    }
+
 
     public void verifySuccessMessageDisplayed() {
         WebElement lblMessage = findMsgCreateOrder();

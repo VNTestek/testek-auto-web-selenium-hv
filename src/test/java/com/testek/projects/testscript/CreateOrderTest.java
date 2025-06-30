@@ -38,15 +38,25 @@ public class CreateOrderTest extends TestBase {
     @Test(description = "Verify creating a new order")
     public void TK_CreateOrder_001_Valid() {
         orderPage.clickIconAdd();
-        orderPage.clickMnuOrder();
+        orderPage.clickOptOrder();
 
         orderPage.verifyOrderPageDisplay(); // Verify order page hien thi
 
-        orderPage.clickToCreateOrder()      // Click button Create Product
-                .fillOrderInfo()
-                .clickToCreateOrder();
+        for (int a = 0; a < 2; a++) {
+            orderPage.clickToCreateOrder()      // Click button Create Product
+                    .fillOrderInfo()
+                    .clickToCreateOrder();
 
-        // Verify the login successfully
-        orderPage.verifyOrderCreation();        // Verify popup success hien thi
+            // Verify popup success hien thi
+            orderPage.verifyOrderCreation();
+
+            orderPage.clear();
+        }
+
+        orderPage.clickMenuOrder();
+        orderPage.inputKey();
+        orderPage.clickSearch();
+
+        // Verify search result
     }
 }

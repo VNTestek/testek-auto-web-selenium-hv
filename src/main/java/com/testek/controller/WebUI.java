@@ -322,6 +322,13 @@ public class WebUI {
     /**
      * Click the object
      */
+    public void clearText(WebElement element) {
+        element.clear();
+    }
+
+    /**
+     * Click the object
+     */
     public void clickTo(By by, String... titles) {
         WebElement element = findWebElement(by);
         clickTo(element, titles);
