@@ -22,7 +22,6 @@ import static com.testek.consts.FrameConst.ExecuteConfig.EXE_BROWSER;
 public class CreateOrderTest extends TestBase {
     OrderPage orderPage;
     HomePage homePage;
-    LoginPage loginPage;
 
     @BeforeClass(alwaysRun = true)
     public void beforeClass() {
@@ -38,6 +37,9 @@ public class CreateOrderTest extends TestBase {
     @FrameAnnotation(category = {FrameConst.CategoryType.REGRESSION}, author = {AuthorType.Vincent}, reviewer = {AuthorType.Vincent})
     @Test(description = "Verify creating a new order")
     public void TK_CreateOrder_001_Valid() {
+        orderPage.clickIconAdd();
+        orderPage.clickMnuOrder();
+
         orderPage.verifyOrderPageDisplay(); // Verify order page hien thi
 
         orderPage.clickToCreateOrder()      // Click button Create Product

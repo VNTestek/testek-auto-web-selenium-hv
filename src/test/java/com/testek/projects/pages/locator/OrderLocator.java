@@ -26,6 +26,8 @@ public class OrderLocator extends BaseLocator {
     String btnAddMore = "//button[@testek='btn-add-more']";
     String popUpAddOrderSuccess = "//span[normalize-space()='Thêm đơn hàng thành công']";
 //    String popUpAddProductResult= "//div[contains(@class,'ant-message-success')]";
+    String iconAdd = "//div[@class='cursor-pointer icon-24 icon-insert']";
+    String mnuProduct = "//span[starts-with(@class,'ant-dropdown')]/div[normalize-space()='Đơn hàng']";
 
     /* Order List */
     String lblRowContent = "//td[text()='%s']";

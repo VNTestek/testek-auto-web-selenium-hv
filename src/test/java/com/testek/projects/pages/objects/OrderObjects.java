@@ -66,6 +66,24 @@ public class OrderObjects extends BaseObjects {
         return findWebElement(orderLocator.getTxtAreaResult());
     }
 
+    public WebElement findIconAdd() {
+        return findWebElement(orderLocator.getIconAdd());
+    }
+
+    public WebElement findMnuOrder() {
+        return findWebElement(orderLocator.getMnuProduct());
+    }
+
+    public OrderObjects clickIconAddOrder() {
+        clickTo(findIconAdd(), "Icon Add");
+        return this;
+    }
+
+    public OrderObjects clickMenuOrder() {
+        clickTo(findMnuOrder(), "Menu Product");
+        return this;
+    }
+
 
     public OrderObjects inputShippingPhone(String shippingPhone) {
         this.inputText(findShippingPhone(), "Shipping Phone", shippingPhone);

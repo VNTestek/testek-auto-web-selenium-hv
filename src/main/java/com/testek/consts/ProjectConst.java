@@ -15,7 +15,7 @@ public class ProjectConst {
     public enum ModuleURL {
         DASHBOARD("Dashboard", APP_DOMAIN + "/dashboard"),
         PRODUCT("Product", APP_DOMAIN + "/product"),
-        ORDER("Order", APP_DOMAIN + "/lab/auto/order");
+        ORDER("Order", APP_DOMAIN + "/order");
 
         private final String name;
         private final String path;

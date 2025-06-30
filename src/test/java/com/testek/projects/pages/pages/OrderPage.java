@@ -6,6 +6,7 @@ import com.testek.projects.dataprovider.model.CreateOrderModel;
 import com.testek.projects.pages.objects.OrderObjects;
 import com.testek.projects.pages.objects.ProductObjects;
 import org.json.JSONObject;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import java.util.Objects;
@@ -24,6 +25,16 @@ public class OrderPage extends BasePage {
 
     public OrderPage clickToCreateOrder() {
         orderObjects.clickAddMore();
+        return this;
+    }
+
+    public OrderPage clickIconAdd() {
+        orderObjects.clickIconAddOrder();
+        return this;
+    }
+
+    public OrderPage clickMnuOrder() {
+        orderObjects.clickMenuOrder();
         return this;
     }
 
@@ -48,22 +59,22 @@ public class OrderPage extends BasePage {
         return this;
     }
 
+    /* Update the random Price & Quantity */
+    long currentTimeMillis = System.nanoTime();
+    String customerName = "LINH CHI";
+    String employeeName = "Nguyễn Nhân Viên";
+    String shippingPhone = "0123456789";
+    String phoneNumber = "0374975401";
+    String email = "vukimchi023@gmail.com";
+    String address = "Auto_Hai Ba Trung, Ha Noi_" + currentTimeMillis;
+    String addressOrder = "Auto_Nguyen Luong Bang, Ha Noi_" + currentTimeMillis;
+
     /**
      * Fill the product information with random data
      */
     public OrderPage fillOrderInfo() {
-        /* Update the random Price & Quantity */
-        long currentTimeMillis = System.nanoTime();
-        String customer = "LINH CHI";
-        String employee = "Nguyễn Nhân Viên";
-        String shippingPhone = "0123456789";
-        String phoneNumber = "0374975401";
-        String email = "vukimchi023@gmail.com";
-        String address = "Auto_Hai Ba Trung, Ha Noi_" + currentTimeMillis;
-        String addressOrder = "Auto_Nguyen Luong Bang, Ha Noi_" + currentTimeMillis;
-
-        orderObjects.selectCustomer(customer)
-                .selectEmployee(employee)
+        orderObjects.selectCustomer(customerName)
+                .selectEmployee(employeeName)
                 .inputShippingPhone(shippingPhone)
                 .inputPhoneNum(phoneNumber)
                 .inputEmail(email)
@@ -95,7 +106,29 @@ public class OrderPage extends BasePage {
                 FailureHandling.CONTINUE_ON_FAILURE, "Verify the order code matches the input value");
 
         // TODO: Verify the product info
-    }
+        JSONObject response = new JSONObject(resultText);
+        JSONObject data = response.getJSONObject("data");
+        JSONObject customer = data.getJSONObject("customerId"); // LẤY CUSTOMER OBJECT
 
-    //endregion
+        assertEqualCondition(orderResultEle, data.get("id"), getValueOfElement(orderIdEle),
+                FailureHandling.CONTINUE_ON_FAILURE, "Verify the order id NOT matches the input value");
+
+        assertFalseCondition(orderResultEle, data.get("shippingPhoneNum").equals(shippingPhone),
+                FailureHandling.CONTINUE_ON_FAILURE, "Verify the order shipping phone matches the input value");
+
+        assertTrueCondition(orderResultEle, response.get("statusCode").equals(201),
+                FailureHandling.CONTINUE_ON_FAILURE, "Verify the status code NOT matches the input value");
+
+        assertEqualCondition(orderResultEle, customer.get("name"), customerName,
+                FailureHandling.CONTINUE_ON_FAILURE, "Verify the order customer NOT matches the input value");
+
+        assertFalseCondition(orderResultEle, customer.get("phoneNum").equals(phoneNumber),
+                FailureHandling.CONTINUE_ON_FAILURE, "Verify the order phone number matches the input value");
+
+        assertFalseCondition(orderResultEle, customer.get("email").equals(email),
+                FailureHandling.CONTINUE_ON_FAILURE, "Verify the order email matches the input value");
+
+        assertFalseCondition(orderResultEle, customer.get("address").equals(address),
+                FailureHandling.CONTINUE_ON_FAILURE, "Verify the order address matches the input value" );
+    }
 }
