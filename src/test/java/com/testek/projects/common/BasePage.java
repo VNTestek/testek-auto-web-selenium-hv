@@ -6,6 +6,7 @@ import com.testek.controller.WebUI;
 import com.testek.driver.DriverManager;
 import com.testek.consts.ProjectConst;
 import com.testek.projects.pages.pages.ProductPage;
+import com.testek.study.lesson13.exercise.pages.pages.OrderPage;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,6 +54,14 @@ public class BasePage extends WebUI {
         ProjectConst.ModuleURL module = ProjectConst.ModuleURL.PRODUCT;
         goToSpecificURL(module.getPath(), module.getName());
         return new ProductPage();
+    }
+
+    @Step
+    public OrderPage gotoOrderPage() {
+        String orderPagePath = "https://testek.vn/lab/auto/create-order";
+        String orderPageName = "Order";
+        goToSpecificURL(orderPagePath, orderPageName);
+        return new OrderPage();
     }
     //endregion
 
