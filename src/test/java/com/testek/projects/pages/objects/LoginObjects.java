@@ -14,7 +14,7 @@ public class LoginObjects extends BaseObjects {
 
     private final LoginLocator loginLocator;
 
-    private LoginObjects() {
+    public LoginObjects() {
         loginLocator = LoginLocator.getInstance();
     }
 
