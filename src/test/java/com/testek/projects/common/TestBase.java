@@ -144,4 +144,12 @@ public class TestBase {
         }
         return false;
     }
+
+    protected void waitForDebug(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

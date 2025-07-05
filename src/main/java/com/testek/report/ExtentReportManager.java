@@ -103,11 +103,11 @@ public final class ExtentReportManager {
     }
 
     public static void flushReports() {
-        if (Objects.nonNull(extentReports)) {
-            extentReports.flush();
-            updateContent();
-        }
-        ExtentTestManager.unload();
+//        if (Objects.nonNull(extentReports)) {
+//            extentReports.flush();
+//            updateContent();
+//        }
+//        ExtentTestManager.unload();
     }
 
 

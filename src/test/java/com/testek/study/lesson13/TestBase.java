@@ -20,6 +20,7 @@ import org.testng.annotations.*;
 
 import javax.annotation.Nullable;
 import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 
 import static com.testek.consts.FrameConst.WaitConfig.WAIT_EXPLICIT;

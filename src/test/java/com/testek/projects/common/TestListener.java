@@ -148,7 +148,7 @@ public class TestListener implements ITestListener, ISuiteListener, IInvokedMeth
         ExtentReportManager.logMessage(Status.WARNING, "Configuration: " + getTestName(tr) + " - PASS");
         ExtentReportManager.unloadTest();
         ExtentReportManager.removeTest(tr.getName() + " " + className.substring(className.lastIndexOf(".") + 1));
-        flushReport(tr);
+//        flushReport(tr);
     }
 
     @Override
@@ -187,7 +187,7 @@ public class TestListener implements ITestListener, ISuiteListener, IInvokedMeth
 
     public void flushReport(ITestResult iTestResult) {
         String method = iTestResult.getMethod().getConstructorOrMethod().getName();
-        if (method.contains("afterTest")) ExtentReportManager.flushReports();
+//        if (method.contains("afterTest")) ExtentReportManager.flushReports();
     }
 
     private void addTestToExtentReport(ITestResult iTestResult) {

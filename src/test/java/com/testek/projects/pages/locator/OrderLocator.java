@@ -1,8 +1,6 @@
 package com.testek.projects.pages.locator;
 
-
 import lombok.Getter;
-import org.openqa.selenium.By;
 
 @Getter
 public class OrderLocator extends BaseLocator {

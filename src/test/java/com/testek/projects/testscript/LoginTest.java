@@ -56,8 +56,5 @@ public class LoginTest extends TestBase {
         homePage.accessAddOrder();
 //        3.1. Kiểm tra truy cập đơn hàng đúng không ?
         homePage.verifyAddOrder();
-
-        //4. Nhập thông tin cho Đơn hàng
-
     }
 }

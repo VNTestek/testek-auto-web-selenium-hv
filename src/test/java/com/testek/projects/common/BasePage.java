@@ -5,6 +5,7 @@ import com.testek.consts.FrameConst.LogType;
 import com.testek.controller.WebUI;
 import com.testek.driver.DriverManager;
 import com.testek.consts.ProjectConst;
+import com.testek.projects.pages.pages.CreateSupplierPage;
 import com.testek.projects.pages.pages.OrderPage;
 import com.testek.projects.pages.pages.ProductPage;
 import io.qameta.allure.Step;
@@ -65,6 +66,17 @@ public class BasePage extends WebUI {
         goToSpecificURL(module.getPath(), module.getName());
         return new OrderPage();
     }
+
+    /**
+     * Access the 'Create Supplier' page
+     */
+    @Step("Go to 'Create' Supplier")
+    public CreateSupplierPage gotoCreateSupplierPage() {
+        ProjectConst.ModuleURL module = ProjectConst.ModuleURL.CREATESUPPLIER;
+        goToSpecificURL(module.getPath(), module.getName());
+        return new CreateSupplierPage();
+    }
+
     //endregion
 
 }

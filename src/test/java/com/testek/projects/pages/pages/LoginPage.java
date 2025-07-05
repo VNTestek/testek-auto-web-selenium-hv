@@ -1,12 +1,10 @@
 package com.testek.projects.pages.pages;
 
-import com.testek.consts.FrameConst;
 import com.testek.consts.FrameConst.FailureHandling;
 import com.testek.driver.DriverManager;
 import com.testek.projects.common.BasePage;
 import com.testek.projects.dataprovider.model.LoginModel;
 import com.testek.projects.pages.objects.LoginObjects;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
 import static com.testek.consts.FrameConst.AppConfig;
@@ -18,8 +16,9 @@ import static com.testek.consts.FrameConst.AppConfig;
 public class LoginPage extends BasePage {
     private final LoginObjects loginObjects;
 
+    //Constructor
     public LoginPage() {
-        webDriver = DriverManager.getDriver();
+        webDriver = DriverManager.getDriver(); // muốn tương tác đc vs phần tử phải khởi tạo webDriver
         PageFactory.initElements(webDriver, this);
 
         loginObjects = LoginObjects.getInstance();
@@ -29,10 +28,10 @@ public class LoginPage extends BasePage {
 
 
     /* Go to the login page */
-    public LoginPage goToLoginPage() {
-        goToURL(AppConfig.APP_DOMAIN);
-        return this;
-    }
+//    public LoginPage goToLoginPage() {
+//        goToURL(AppConfig.APP_DOMAIN);
+//        return this;
+//    }
 
 
     //***************** Integration Functions *****************/
@@ -46,8 +45,8 @@ public class LoginPage extends BasePage {
     /* Login  with userName and password */
     public HomePage login(String userName, String password) {
         HomePage homePage = loginObjects.inputUserName(userName)
-        .inputPassword(password)
-        .clickLoginButton();
+                                        .inputPassword(password)
+                                        .clickLoginButton();
 
         // Verify the home page after login
         homePage.verifyHomePage();

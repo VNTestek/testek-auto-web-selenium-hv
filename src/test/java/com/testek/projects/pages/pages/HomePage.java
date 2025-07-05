@@ -6,24 +6,24 @@ import com.testek.projects.common.BasePage;
 import com.testek.projects.pages.PageManagement;
 import com.testek.projects.pages.objects.HomePageObjects;
 import com.testek.projects.pages.objects.LoginObjects;
+import com.testek.projects.pages.objects.SupplierListObjects;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 public class HomePage extends BasePage {
 
     private final HomePageObjects homePageObjects;
-    private final LoginObjects loginObjects;
+//    private final LoginObjects loginObjects;
+    private final SupplierListObjects supplierListObjects;
 
     public HomePage() {
         webDriver = DriverManager.getDriver();
         PageFactory.initElements(webDriver, this);
 
         homePageObjects = HomePageObjects.getInstance();
-        loginObjects = LoginObjects.getInstance();
+//        loginObjects = LoginObjects.getInstance();
+        supplierListObjects = SupplierListObjects.getInstance();
     }
 
     //***************** Init WebElement Object *****************/
@@ -38,10 +38,9 @@ public class HomePage extends BasePage {
         assertTrueCondition(iconUserEle, iconUserEle.isDisplayed(), FrameConst.FailureHandling.CONTINUE_ON_FAILURE, "Login Failed");
     }
 
-    public HomePage accessAddOrder() {
-        HomePageObjects homePageObj = homePageObjects.clickIconAdd()
+    public OrderPage accessAddOrder() {
+        return homePageObjects.clickIconAdd()
                         .clickMnuOrder();
-        return PageManagement.gotoHomePage();
     }
 
     public void verifyAddOrder() {
@@ -63,4 +62,22 @@ public class HomePage extends BasePage {
 //        return homePage;
 //    }
 
+    //BÀI 14:
+    //Truy cập add button > Lựa chọn Nhà cung cấp
+    public CreateSupplierPage accessCreateSupplierPage() {
+        return homePageObjects.clickIconAdd()
+                .clickOptSupplier();
+    }
+
+    //Truy cập add button > Lựa chọn khach hang
+    public CreateCustomerPage accessCreateCustomerPage() {
+        return homePageObjects.clickIconAdd()
+               .clickOptCus();
+    }
+
+    // Truy cập menu “Nhà cung cấp” > Tìm kiếm trong danh sách và verify
+    public SupplierListPage accessSupplierListPage() {
+        supplierListObjects.clickMnuSup();
+        return PageManagement.gotoSupplierListPage();
+    }
 }

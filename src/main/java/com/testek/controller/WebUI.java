@@ -754,7 +754,6 @@ public class WebUI {
         return element;
     }
 
-
     /**
      * Verify whether the element is visible or not
      */
@@ -768,6 +767,7 @@ public class WebUI {
         }
         return element;
     }
+
 
     /**
      * Wait for element clickable

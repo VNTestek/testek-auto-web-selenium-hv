@@ -5,7 +5,6 @@ import com.testek.projects.pages.PageManagement;
 import com.testek.projects.pages.locator.LoginLocator;
 import com.testek.projects.pages.pages.HomePage;
 import lombok.Getter;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 @Getter
